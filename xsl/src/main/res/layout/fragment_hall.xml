@@ -1,0 +1,72 @@
+<?xml version="1.0" encoding="utf-8"?>
+<android.support.design.widget.CoordinatorLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+    <android.support.design.widget.AppBarLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="?attr/app_primary_color"
+        app:elevation="0dp">
+
+
+        <android.support.v7.widget.Toolbar
+            android:id="@+id/toolbar_hall"
+            android:layout_width="match_parent"
+            android:layout_height="?attr/qmui_topbar_height"
+            app:layout_scrollFlags="scroll|snap|enterAlways">
+
+            <RelativeLayout
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:gravity="center_vertical">
+
+                <com.qmuiteam.qmui.widget.QMUIRadiusImageView
+                    android:id="@+id/iv_touxiang"
+                    android:layout_width="30dp"
+                    android:layout_height="30dp"
+                    android:layout_centerVertical="true"
+                    android:src="@drawable/default_tx_man"
+                    app:qmui_border_width="0dp"
+                    app:qmui_is_circle="true" />
+
+
+                <Button
+                    android:id="@+id/bt_search"
+                    android:layout_width="match_parent"
+                    android:layout_height="30dp"
+                    android:layout_centerVertical="true"
+                    android:layout_marginLeft="16dp"
+                    android:layout_marginRight="16dp"
+                    android:layout_toLeftOf="@id/iv_add_task"
+                    android:layout_toRightOf="@id/iv_touxiang"
+                    android:alpha="0.4"
+                    android:background="@drawable/bt_search"
+                    android:gravity="left|center_vertical"
+                    android:paddingLeft="16dp"
+                    android:text="搜索"
+                    android:textColor="@color/app_color_blue" />
+
+                <ImageButton
+                    android:id="@+id/iv_add_task"
+                    android:layout_width="18dp"
+                    android:layout_height="18dp"
+                    android:layout_alignParentEnd="true"
+                    android:layout_alignParentRight="true"
+                    android:layout_centerVertical="true"
+                    android:layout_marginLeft="16dp"
+                    android:layout_marginRight="16dp"
+                    android:background="@drawable/ripple_bg"
+                    android:src="@drawable/ic_jia" />
+            </RelativeLayout>
+
+        </android.support.v7.widget.Toolbar>
+
+
+    </android.support.design.widget.AppBarLayout>
+
+    <include layout="@layout/content_hall" />
+
+</android.support.design.widget.CoordinatorLayout>

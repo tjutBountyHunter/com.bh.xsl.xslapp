@@ -1,0 +1,99 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:fitsSystemWindows="true"
+    android:orientation="vertical">
+
+    <com.qmuiteam.qmui.widget.QMUITopBar
+        android:id="@+id/topbar_sign_in"
+        android:layout_width="match_parent"
+        android:layout_height="?attr/qmui_topbar_height"
+        android:fitsSystemWindows="true"
+        android:padding="16dp">
+        <TextView
+            android:id="@+id/tv_forget_password_link"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentEnd="true"
+            android:layout_alignParentRight="true"
+            android:layout_centerVertical="true"
+            android:clickable="true"
+            android:focusable="true"
+            android:padding="4dp"
+            android:text="@string/forget_passwd"
+            android:textColor="@color/qmui_config_color_white" />
+    </com.qmuiteam.qmui.widget.QMUITopBar>
+
+    <android.support.v4.widget.NestedScrollView
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:scrollbars="none">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:orientation="vertical"
+            android:padding="32dp">
+
+            <!--背景、图标 logo-->
+            <ImageView
+                android:id="@+id/image_sign_in_logo"
+                android:layout_width="match_parent"
+                android:layout_height="80dp"
+                android:contentDescription="@string/app_logo_name"
+                android:src="@drawable/sign_in_logo" />
+
+
+            <EditText
+
+                android:id="@+id/et_sign_in_phone"
+                android:layout_width="match_parent"
+                android:layout_height="56dp"
+                android:drawableStart="@drawable/et_sign_in_phone_icon_left"
+                android:drawableLeft="@drawable/et_sign_in_phone_icon_left"
+                android:drawablePadding="16dp"
+                android:hint="@string/you_phone"
+                android:inputType="phone"
+                android:maxLength="11"
+                android:textSize="14sp" />
+
+            <EditText
+                android:id="@+id/et_sign_in_password"
+                android:layout_width="match_parent"
+                android:layout_height="56dp"
+                android:layout_marginTop="16dp"
+                android:drawableStart="@drawable/et_sign_in_password_icon_left"
+                android:drawableLeft="@drawable/et_sign_in_password_icon_left"
+                android:drawablePadding="16dp"
+                android:hint="@string/please_input_passwd"
+                android:inputType="textPassword"
+                android:maxLength="16"
+                android:textSize="14sp" />
+
+            <com.qmuiteam.qmui.widget.roundwidget.QMUIRoundButton
+                android:id="@+id/bt_action_sign_in"
+                style="@style/full_button"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="16dp"
+                android:layout_marginBottom="16dp"
+                android:enabled="false"
+                android:padding="8dp"
+                android:text="@string/sign_in" />
+
+            <com.qmuiteam.qmui.widget.roundwidget.QMUIRoundButton
+                android:id="@+id/bt_action_sign_up_link"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="16dp"
+                android:layout_marginBottom="16dp"
+                android:padding="8dp"
+                android:text="@string/sign_up" />
+
+
+        </LinearLayout>
+    </android.support.v4.widget.NestedScrollView>
+
+</LinearLayout>

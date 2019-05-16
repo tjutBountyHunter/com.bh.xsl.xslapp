@@ -1,0 +1,35 @@
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".mvp.ui.activity.MainActivity">
+
+    <android.support.v4.view.ViewPager
+        android:id="@+id/fragment_vp"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_above="@+id/divider" />
+
+
+    <View
+        android:id="@+id/divider"
+        android:layout_width="match_parent"
+        android:layout_height="0.3dp"
+        android:layout_above="@+id/nav_view"
+        android:background="@color/qmui_config_color_gray_9" />
+
+    <android.support.design.widget.BottomNavigationView
+        android:id="@+id/nav_view"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_alignParentBottom="true"
+        android:layout_marginStart="0dp"
+        android:layout_marginEnd="0dp"
+
+        android:background="?android:attr/windowBackground"
+        app:elevation="0dp"
+        app:itemIconTint="@color/nav_bt"
+        app:itemTextColor="@color/nav_bt"
+        app:menu="@menu/bottom_nav_menu" />
+</RelativeLayout>

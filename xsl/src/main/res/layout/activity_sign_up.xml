@@ -1,0 +1,231 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:fitsSystemWindows="true"
+    android:orientation="vertical">
+
+    <com.qmuiteam.qmui.widget.QMUITopBar
+        android:id="@+id/topbar_sign_up"
+        android:layout_width="match_parent"
+        android:layout_height="?attr/qmui_topbar_height"
+        android:fitsSystemWindows="true"
+        android:gravity="center_vertical"
+        app:qmui_topbar_title_gravity="left_center" />
+
+    <android.support.v4.widget.NestedScrollView
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:scrollbars="none">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:orientation="vertical"
+            android:paddingTop="16dp"
+            android:paddingBottom="16dp">
+            <!--手机、验证码模块-->
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:background="@color/qmui_config_color_white"
+                android:divider="@drawable/qmui_divider"
+                android:orientation="vertical"
+                android:showDividers="middle|beginning|end">
+                <!--手机-->
+                <RelativeLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:paddingLeft="16dp"
+                    android:paddingTop="16dp"
+                    android:paddingRight="16dp"
+                    android:paddingBottom="16dp">
+
+                    <TextView
+                        android:id="@+id/tv_phone_code"
+                        android:layout_width="64dp"
+                        android:layout_height="wrap_content"
+                        android:text="+86"
+                        android:textSize="14sp" />
+
+                    <EditText
+                        android:id="@+id/et_phone"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_toStartOf="@id/llay_ver_code"
+                        android:layout_toLeftOf="@id/llay_ver_code"
+                        android:layout_toEndOf="@id/tv_phone_code"
+                        android:layout_toRightOf="@id/tv_phone_code"
+                        android:background="@null"
+                        android:hint="请输入常用手机号"
+                        android:inputType="number"
+                        android:maxLength="11"
+                        android:maxLines="1"
+                        android:singleLine="true"
+                        android:textSize="14sp" />
+
+                    <LinearLayout
+                        android:id="@+id/llay_ver_code"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_alignParentRight="true"
+                        android:divider="@drawable/qmui_divider"
+                        android:orientation="horizontal"
+                        android:showDividers="beginning">
+
+                        <TextView
+                            android:id="@+id/tv_ver_code"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:paddingStart="8dp"
+                            android:paddingLeft="8dp"
+                            android:text="获取验证码"
+                            android:textColor="@color/app_color_blue"
+                            tools:ignore="RtlSymmetry" />
+                    </LinearLayout>
+
+                </RelativeLayout>
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="horizontal"
+                    android:paddingLeft="16dp"
+                    android:paddingTop="16dp"
+                    android:paddingRight="16dp"
+                    android:paddingBottom="16dp">
+
+                    <TextView
+                        android:layout_width="64dp"
+                        android:layout_height="wrap_content"
+                        android:text="验证码"
+                        android:textSize="14sp" />
+
+                    <EditText
+                        android:id="@+id/et_ver_code"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:background="@null"
+                        android:hint="请输入验证码"
+                        android:inputType="number"
+                        android:maxLength="6"
+                        android:maxLines="1"
+                        android:singleLine="true"
+                        android:textSize="14sp" />
+
+                </LinearLayout>
+
+            </LinearLayout>
+
+            <!--密码模块-->
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="16dp"
+                android:background="@color/qmui_config_color_white"
+                android:divider="@drawable/qmui_divider"
+                android:orientation="vertical"
+                android:showDividers="middle|beginning|end">
+                <!--输入密码-->
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="horizontal"
+                    android:paddingLeft="16dp"
+                    android:paddingTop="16dp"
+                    android:paddingRight="16dp"
+                    android:paddingBottom="16dp">
+
+                    <TextView
+                        android:layout_width="64dp"
+                        android:layout_height="wrap_content"
+                        android:text="密码"
+                        android:textSize="14sp" />
+
+                    <EditText
+                        android:id="@+id/et_password"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:background="@null"
+                        android:hint="6~16个字符，区分大小写"
+                        android:inputType="textPassword"
+                        android:maxLength="16"
+                        android:maxLines="1"
+                        android:singleLine="true"
+                        android:textSize="14sp" />
+
+                </LinearLayout>
+                <!--确认密码-->
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="horizontal"
+                    android:paddingLeft="16dp"
+                    android:paddingTop="16dp"
+                    android:paddingRight="16dp"
+                    android:paddingBottom="16dp">
+
+                    <TextView
+                        android:layout_width="64dp"
+                        android:layout_height="wrap_content"
+                        android:text="确认密码"
+                        android:textSize="14sp" />
+
+                    <EditText
+                        android:id="@+id/et_re_password"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:background="@null"
+                        android:hint="重复输入密码"
+                        android:inputType="textPassword"
+                        android:maxLength="16"
+                        android:singleLine="true"
+                        android:textSize="14sp" />
+
+                </LinearLayout>
+
+            </LinearLayout>
+
+            <com.qmuiteam.qmui.widget.roundwidget.QMUIRoundButton
+                android:id="@+id/bt_action_next"
+                style="@style/full_button"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="16dp"
+                android:layout_marginTop="32dp"
+                android:layout_marginRight="16dp"
+                android:layout_marginBottom="16dp"
+                android:enabled="false"
+                android:padding="8dp"
+                android:text="注册并登录" />
+
+            <!--注册协议-->
+            <LinearLayout
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center_horizontal"
+                android:orientation="horizontal">
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="点击“获取验证码”按钮,即表示同意"
+                    android:textSize="12sp" />
+
+                <TextView
+                    android:id="@+id/tv_signup_link"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="2dp"
+                    android:layout_marginLeft="2dp"
+                    android:text="注册协议"
+                    android:textColor="@color/app_color_blue"
+                    android:textSize="12sp" />
+            </LinearLayout>
+
+        </LinearLayout>
+    </android.support.v4.widget.NestedScrollView>
+
+</LinearLayout>

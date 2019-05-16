@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@drawable/launcher_00"
+    tools:context=".mvp.ui.activity.LaucherActivity">
+
+    <android.support.v7.widget.AppCompatTextView
+        android:id="@+id/tv_welcome_timer"
+        android:layout_width="56dp"
+        android:layout_height="36dp"
+        android:layout_alignParentEnd="true"
+        android:layout_alignParentRight="true"
+        android:layout_alignParentBottom="true"
+        android:layout_margin="16dp"
+        android:alpha="0.3"
+        android:background="@drawable/border_cicle_timer"
+        android:gravity="center"
+        android:textColor="@color/qmui_config_color_white"
+        android:textSize="14sp" />
+
+</RelativeLayout>

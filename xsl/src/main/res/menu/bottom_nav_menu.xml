@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <item
+        android:id="@+id/navigation_home"
+        android:icon="@drawable/ic_task_dating_not"
+        android:title="任务大厅" />
+
+    <item
+        android:id="@+id/navigation_dashboard"
+        android:icon="@drawable/ic_hunter_shichang_not"
+        android:title="猎人市场" />
+
+    <item
+        android:id="@+id/navigation_notifications"
+        android:icon="@drawable/ic_message_not"
+        android:title="消息" />
+
+</menu>

@@ -1,0 +1,18 @@
+<resources>
+    <string name="app_name">悬赏令</string>
+
+    <string name="permission">权限(permission)</string>
+    <string name="no_permissions">应用需要必要的运行权限</string>
+    <string name="settings">设置</string>
+    <string name="help">帮助</string>
+    <string name="string_help_text">当前应用缺少必要权限。\n\n请点击\"设置\"-\"权限\"-打开所需权限。\n\n最后点击两次后退按钮，即可返回。</string>
+    <string name="quit">退出</string>
+    <string name="title_activity_main">MainActivity</string>
+    <string name="you_phone">你的手机号</string>
+    <string name="please_input_passwd">请输入你的密码</string>
+    <string name="sign_in">登录</string>
+    <string name="sign_up">注册</string>
+    <string name="app_logo_name">悬赏令logo</string>
+    <string name="forget_passwd">？忘记密码</string>
+    <string name="add_task_title">悬赏任务</string>
+</resources>

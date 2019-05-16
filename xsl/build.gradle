@@ -1,0 +1,141 @@
+apply plugin: 'com.android.application'
+apply plugin: 'org.greenrobot.greendao'
+
+android {
+    compileSdkVersion rootProject.ext.android["compileSdkVersion"]
+
+    useLibrary 'org.apache.http.legacy'
+
+    compileOptions {
+        targetCompatibility JavaVersion.VERSION_1_8
+        sourceCompatibility JavaVersion.VERSION_1_8
+    }
+
+
+    defaultConfig {
+        applicationId "org.tjut.xsl"
+        minSdkVersion rootProject.ext.android["minSdkVersion"]
+        targetSdkVersion rootProject.ext.android["targetSdkVersion"]
+        versionCode rootProject.ext.android["versionCode"]
+        versionName rootProject.ext.android["versionName"]
+        testInstrumentationRunner rootProject.ext.dependencies["androidJUnitRunner"]
+
+        ndk {
+            //选择要添加的对应 cpu 类型的 .so 库。
+            abiFilters 'armeabi', 'armeabi-v7a', 'arm64-v8a', 'x86', 'x86_64', 'mips', 'mips64'
+            // 还可以添加 'x86', 'x86_64', 'mips', 'mips64'
+        }
+
+        manifestPlaceholders = [
+                JPUSH_PKGNAME: applicationId,
+                JPUSH_APPKEY : "52aa3d2a39eda5f388578c00", //JPush 上注册的包名对应的 Appkey.
+                JPUSH_CHANNEL: "developer-default", //暂时填写默认值即可.
+        ]
+
+        multiDexEnabled true
+    }
+
+    buildTypes {
+        debug {
+            buildConfigField "boolean", "LOG_DEBUG", "true"
+            buildConfigField "boolean", "USE_CANARY", "true"
+            minifyEnabled false
+            proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
+        }
+
+        release {
+            buildConfigField "boolean", "LOG_DEBUG", "false"
+            buildConfigField "boolean", "USE_CANARY", "false"
+            minifyEnabled true
+            shrinkResources true
+            zipAlignEnabled true
+            proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
+        }
+    }
+
+    lintOptions {
+        disable 'InvalidPackage'
+        disable "ResourceType"
+        abortOnError false
+    }
+}
+
+dependencies {
+    implementation fileTree(dir: 'libs', include: ['*.jar'])
+    implementation 'me.jessyan:arms:2.5.0'
+    implementation 'me.jessyan:arms-imageloader-glide:2.5.0'
+
+    //view
+    implementation rootProject.ext.dependencies["autosize"]
+    annotationProcessor(rootProject.ext.dependencies["butterknife-compiler"]) {
+        exclude module: 'support-annotations'
+    }
+    implementation 'com.android.support.constraint:constraint-layout:1.1.3'
+
+    //tools
+    annotationProcessor rootProject.ext.dependencies["dagger2-compiler"]
+
+    //注意 Arms 核心库现在并不会依赖某个 EventBus, 要想使用 EventBus, 还请在项目中自行依赖对应的 EventBus
+    //现在支持两种 EventBus, greenrobot 的 EventBus 和畅销书 《Android源码设计模式解析与实战》的作者 何红辉 所作的 AndroidEventBus
+    //依赖后 Arms 会自动检测您依赖的 EventBus 并自动注册
+    //建议使用 AndroidEventBus, 特别是组件化项目, 原因请看 https://github.com/hehonghui/AndroidEventBus/issues/49
+    //这种做法可以让使用者有自行选择三方库的权利, 并且还可以减轻 Arms 的体积
+    implementation rootProject.ext.dependencies["androideventbus"]
+//    implementation rootProject.ext.dependencies["eventbus"]
+
+    //test
+    debugImplementation rootProject.ext.dependencies["canary-debug"]
+    releaseImplementation rootProject.ext.dependencies["canary-release"]
+    testImplementation rootProject.ext.dependencies["canary-release"]
+    testImplementation rootProject.ext.dependencies["junit"]
+
+    //qmui依赖
+    implementation 'com.qmuiteam:qmui:1.2.0'
+
+    //Fastjson依赖
+    implementation 'com.alibaba:fastjson:1.1.71.android'
+    implementation 'org.ligboy.retrofit2:converter-fastjson-android:2.1.0'
+
+    // 极光推送
+    implementation 'cn.jiguang.sdk:jpush:3.2.0'  // 此处以JPush 3.2.0 版本为例。
+    implementation 'cn.jiguang.sdk:jcore:2.0.0'  // 此处以JCore 2.0.0 版本为例。
+
+    //数据库依赖
+   implementation 'org.greenrobot:greendao:3.2.2'
+
+    //Banner依赖
+    implementation 'com.bigkoo:convenientbanner:2.0.5'
+    implementation 'com.ToxicBakery.viewpager.transforms:view-pager-transforms:1.2.32@aar'
+    implementation 'com.android.support:design:28.0.0'
+
+    implementation 'com.android.support:multidex:1.0.3'
+
+    // 若使用annotation需要单独引用,对于tinker的其他库都无需再引用
+    compileOnly("com.tinkerpatch.tinker:tinker-android-anno:1.9.13")
+    annotationProcessor("com.tinkerpatch.tinker:tinker-android-anno:1.9.13")
+    implementation("com.tinkerpatch.sdk:tinkerpatch-android-sdk:1.2.13")
+
+    // BRVAH
+    implementation 'com.github.CymChad:BaseRecyclerViewAdapterHelper:2.9.30'
+    implementation 'org.jetbrains:annotations:16.0.1'
+
+    // Glide
+//    implementation 'com.github.bumptech.glide:glide:4.9.0'
+//    annotationProcessor 'com.github.bumptech.glide:compiler:4.9.0'
+}
+
+apply from: 'tinkerpatch.gradle'
+
+greendao {
+    schemaVersion 1 //数据库版本号
+//    daoPackage 'com.aserbao.aserbaosandroid.functions.database.greenDao.db'
+// 设置DaoMaster、DaoSession、Dao 包名
+//    targetGenDir 'src.main.java'
+//      设置DaoMaster、DaoSession、Dao目录,请注意，这里路径用.不要用/
+//    generateTests false
+//      设置为true以自动生成单元测试。
+//    targetGenDirTests 'src.main.java'
+//      应存储生成的单元测试的基本目录。默认为 src / androidTest / java。
+}
+
+

@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:paddingHorizontal="16dp"
+    android:paddingVertical="8dp">
+
+    <TextView
+        android:id="@+id/tv_head_school"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="天津理工大学->综合"
+        android:textSize="12sp" />
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentRight="true"
+        android:drawableLeft="@drawable/ic_recommend"
+        android:drawablePadding="4dp"
+        android:gravity="center_vertical"
+        android:text="推荐"
+        android:textSize="12sp" />
+
+</RelativeLayout>
