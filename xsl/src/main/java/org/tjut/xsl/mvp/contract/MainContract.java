@@ -1,5 +1,7 @@
 package org.tjut.xsl.mvp.contract;
 
+import com.jess.arms.http.imageloader.BaseImageLoaderStrategy;
+import com.jess.arms.http.imageloader.glide.GlideImageLoaderStrategy;
 import com.jess.arms.mvp.IView;
 import com.jess.arms.mvp.IModel;
 

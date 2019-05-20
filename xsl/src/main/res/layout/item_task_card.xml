@@ -34,7 +34,7 @@
             app:layout_constraintTop_toTopOf="parent" />
 
 
-        <org.tjut.xsl_bs.widget.YMULevelText
+        <org.tjut.xsl.mvp.ui.widget.YMULevelText
             android:id="@+id/ym_level"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"

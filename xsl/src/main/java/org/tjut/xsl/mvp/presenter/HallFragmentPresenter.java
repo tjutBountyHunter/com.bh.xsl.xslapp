@@ -15,8 +15,13 @@ import com.jess.arms.integration.ConfigModule;
 import com.jess.arms.mvp.BasePresenter;
 import com.jess.arms.http.imageloader.ImageLoader;
 import com.jess.arms.utils.ArmsUtils;
+import com.jess.arms.utils.RxLifecycleUtils;
+import com.qmuiteam.qmui.widget.QMUIRadiusImageView;
 
+import io.reactivex.android.schedulers.AndroidSchedulers;
+import io.reactivex.schedulers.Schedulers;
 import me.jessyan.rxerrorhandler.core.RxErrorHandler;
+import me.jessyan.rxerrorhandler.handler.ErrorHandleSubscriber;
 
 import javax.inject.Inject;
 
@@ -24,6 +29,12 @@ import org.tjut.xsl.R;
 import org.tjut.xsl.app.AccountManager;
 import org.tjut.xsl.app.GlobalConfiguration;
 import org.tjut.xsl.mvp.contract.HallFragmentContract;
+import org.tjut.xsl.mvp.model.entity.BaseResponse;
+import org.tjut.xsl.mvp.model.entity.HallTaskCard;
+import org.tjut.xsl.mvp.model.entity.Task;
+import org.tjut.xsl.mvp.model.entity.User;
+
+import java.util.List;
 
 
 /**
@@ -65,7 +76,32 @@ public class HallFragmentPresenter extends BasePresenter<HallFragmentContract.Mo
 
     public void initData() {
         mImageLoader.loadImage(mApplication, mRootView.getImageConfig());
-        mModel.requestInitData();
+        if (AccountManager.getSchoolName() == null || AccountManager.getSchoolName().isEmpty()) {
+            mRootView.showNotSchool();
+        } else {
+            mModel.requestInitData()
+                    .subscribeOn(Schedulers.io())
+                    .doOnSubscribe(disposable -> {
+                        mRootView.showLoading();
+                    })
+                    .subscribeOn(AndroidSchedulers.mainThread())
+                    .observeOn(AndroidSchedulers.mainThread())
+                    .doFinally(() -> mRootView.hideLoading())
+                    .compose(RxLifecycleUtils.bindToLifecycle(mRootView))//使用 Rxlifecycle,使 Disposable 和 Activity 一起销毁
+                    .subscribe(new ErrorHandleSubscriber<List<Task>>(mErrorHandler) {
+                        @Override
+                        public void onNext(List<Task> tasks) {
+                            if (tasks == null || tasks.isEmpty()) {
+                                mRootView.showEmptyView();
+                            } else {
+                                mRootView.showInitData(tasks);
+                            }
+                        }
+                    });
+        }
+    }
 
+    public void loadTaskItemTx(ImageConfigImpl imageConfig) {
+        mImageLoader.loadImage(mApplication, imageConfig);
     }
 }

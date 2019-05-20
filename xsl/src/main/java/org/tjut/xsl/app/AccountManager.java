@@ -9,7 +9,7 @@ public class AccountManager {
     public static final int NORMAL_STATE = 1;
 
 
-    private enum SignTag {
+    public enum SignTag {
         SIGN_TAG,
         USER_ID,
         MASTER_ID,
@@ -143,28 +143,28 @@ public class AccountManager {
     }
 
 
-    public static String getSchoolId() {
-        return TeaPreference.getContextProfile(SignTag.SCHOOL_ID.name());
+    public static Long getSchoolId() {
+        return TeaPreference.getContextLong(SignTag.SCHOOL_ID.name());
     }
 
-    public static void setSchoolId(String id) {
-        TeaPreference.setContextProfile(SignTag.SCHOOL_ID.name(), id);
+    public static void setSchoolId(Long id) {
+        TeaPreference.setContextLong(SignTag.SCHOOL_ID.name(), id);
     }
 
-    public static String getCollegeId() {
-        return TeaPreference.getContextProfile(SignTag.COLLEGE_ID.name());
+    public static Long getCollegeId() {
+        return TeaPreference.getContextLong(SignTag.COLLEGE_ID.name());
     }
 
-    public static void setCollegeId(String id) {
-        TeaPreference.setContextProfile(SignTag.COLLEGE_ID.name(), id);
+    public static void setCollegeId(Long id) {
+        TeaPreference.setContextLong(SignTag.COLLEGE_ID.name(), id);
     }
 
-    public static String getMajorId() {
-        return TeaPreference.getContextProfile(SignTag.MAJOR_ID.name());
+    public static Long getMajorId() {
+        return TeaPreference.getContextLong(SignTag.MAJOR_ID.name());
     }
 
-    public static void setMajorId(String id) {
-        TeaPreference.setContextProfile(SignTag.MAJOR_ID.name(), id);
+    public static void setMajorId(Long id) {
+        TeaPreference.setContextLong(SignTag.MAJOR_ID.name(), id);
     }
 
     public static void setSno(String sno) {

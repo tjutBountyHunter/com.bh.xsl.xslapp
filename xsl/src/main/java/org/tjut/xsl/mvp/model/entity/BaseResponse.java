@@ -35,15 +35,14 @@ import java.lang.reflect.Type;
  * <a href="https://github.com/JessYanCoding">Follow me</a>
  * ================================================
  */
-public class BaseResponse implements Serializable {
-    private String data;
+public class BaseResponse<T> implements Serializable {
+    private T data;
     private Integer status;
     private String msg;
     private Boolean ok;
 
-    public <T> T getData(Class<T> tClass) {
-        Gson gson = new Gson();
-        return gson.fromJson(data, tClass);
+    public T getData() {
+        return data;
     }
 
     public Integer getCode() {

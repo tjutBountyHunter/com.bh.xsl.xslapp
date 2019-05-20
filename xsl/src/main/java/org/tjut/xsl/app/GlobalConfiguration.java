@@ -22,6 +22,7 @@ import org.tjut.xsl.BuildConfig;
 import org.tjut.xsl.mvp.model.api.Api;
 
 import retrofit2.converter.fastjson.FastJsonConverterFactory;
+import retrofit2.converter.scalars.ScalarsConverterFactory;
 
 /**
  * ================================================

@@ -1,10 +1,14 @@
 package org.tjut.xsl.mvp.contract;
 
-import android.widget.ImageView;
-
 import com.jess.arms.http.imageloader.ImageConfig;
 import com.jess.arms.mvp.IView;
 import com.jess.arms.mvp.IModel;
+
+import org.tjut.xsl.mvp.model.entity.Task;
+
+import java.util.List;
+
+import io.reactivex.Observable;
 
 
 /**
@@ -25,11 +29,17 @@ public interface HallFragmentContract {
 
 
         ImageConfig getImageConfig();
+
+        void showInitData(List<Task> tasks);
+
+        void showNotSchool();
+
+        void showEmptyView();
     }
 
     //Model层定义接口,外部只需关心Model返回的数据,无需关心内部细节,即是否使用缓存
     interface Model extends IModel {
 
-        void requestInitData();
+        Observable<List<Task>> requestInitData();
     }
 }

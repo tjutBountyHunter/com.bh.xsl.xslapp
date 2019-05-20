@@ -1,0 +1,48 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".mvp.ui.activity.SchoolActivity">
+
+    <com.qmuiteam.qmui.widget.QMUITopBar
+        android:id="@+id/topbar_schools"
+        android:layout_width="match_parent"
+        android:layout_height="?attr/qmui_topbar_height"
+        android:gravity="center_vertical"
+        app:qmui_topbar_bg_color="@color/app_color_blue"
+        app:qmui_topbar_title_color="@color/qmui_config_color_white"
+        app:qmui_topbar_title_gravity="left_center">
+
+    </com.qmuiteam.qmui.widget.QMUITopBar>
+
+
+    <TextView
+        android:id="@+id/tv_school_tip"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/topbar_schools"
+        android:background="@color/qmui_config_color_gray_9"
+        android:paddingLeft="8dp"
+        android:paddingTop="4dp"
+        android:paddingBottom="4dp"
+        android:text="所有范围" />
+
+    <ProgressBar
+        android:id="@+id/prb_loading"
+        android:layout_width="48dp"
+        android:layout_height="48dp"
+        android:layout_centerInParent="true"
+        android:visibility="gone" />
+
+    <android.support.v7.widget.RecyclerView
+        android:id="@+id/rcl_school"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_below="@id/tv_school_tip">
+
+    </android.support.v7.widget.RecyclerView>
+
+
+</RelativeLayout>

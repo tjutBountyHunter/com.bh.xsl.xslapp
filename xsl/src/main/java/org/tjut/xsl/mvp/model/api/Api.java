@@ -15,7 +15,7 @@ public interface Api {
 
     String HOST_ADDR = "47.93.200.190";
 
-    String PORT = "8081/";
+    String PORT = "80/";
 
     String API_HOST = "http://" + HOST_ADDR;
 
@@ -32,4 +32,16 @@ public interface Api {
     String REGIST_CHECK_CODE = ROOT_PATH + "verify/checkmessage";
 
     String QUICK_REGISTER = USER_PATH + "quickRegister";
+
+    String REQUEST_TASKS_INIT = ROOT_PATH + "task/initTaskInfo";
+
+    String MY_HISTORY_HUNTER = ROOT_PATH + "hunter/queryHistoryHunter";
+
+    String REQUEST_SCHOOLS = ROOT_PATH + "school/schoolClasses";
+
+    String REQUEST_COLLEGE = ROOT_PATH + "school/collegeClasses";
+
+    String REQUEST_MAJOR = ROOT_PATH + "school/majorClasses";
+
+    String TASK_TAG = ROOT_PATH + "tag/queryTag";
 }

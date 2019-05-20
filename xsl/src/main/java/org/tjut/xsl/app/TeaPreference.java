@@ -84,7 +84,7 @@ public class TeaPreference {
     }
 
     public static String getContextProfile(String key) {
-        return getContextPreference().getString(key, "Empty");
+        return getContextPreference().getString(key, "");
     }
 
     public static Long getContextLong(String key) {

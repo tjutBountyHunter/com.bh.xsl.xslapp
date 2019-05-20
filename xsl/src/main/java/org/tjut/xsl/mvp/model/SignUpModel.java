@@ -72,7 +72,7 @@ public class SignUpModel extends BaseModel implements SignUpContract.Model {
         return mRepositoryManager
                 .obtainRetrofitService(SignUpService.class)
                 .getUser(phone, passwd, token)
-                .map(new ServerResponseFunc<>(User.class))
+                .map(new ServerResponseFunc<User>())
                 .map(user -> {
                     UserDao userDao = DatabaseManager.getInstance().getUserDao();
                     userDao.insertOrReplace(user);

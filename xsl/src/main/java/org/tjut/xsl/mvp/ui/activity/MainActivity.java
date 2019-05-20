@@ -12,6 +12,8 @@ import android.support.v4.view.ViewPager;
 
 import com.jess.arms.base.BaseActivity;
 import com.jess.arms.di.component.AppComponent;
+import com.jess.arms.http.imageloader.ImageConfig;
+import com.jess.arms.http.imageloader.glide.GlideImageLoaderStrategy;
 import com.jess.arms.utils.ArmsUtils;
 
 import org.tjut.xsl.di.component.DaggerMainComponent;
@@ -20,6 +22,7 @@ import org.tjut.xsl.mvp.presenter.MainPresenter;
 
 import org.tjut.xsl.R;
 import org.tjut.xsl.mvp.ui.fragment.HallFragment;
+import org.tjut.xsl.mvp.ui.fragment.HunterHallFragment;
 
 
 import java.util.HashMap;
@@ -170,7 +173,7 @@ public class MainActivity extends BaseActivity<MainPresenter> implements MainCon
             if (page == ContentPage.Item1) {
                 fragment = HallFragment.newInstance();
             } else if (page == ContentPage.Item2) {
-                fragment = HallFragment.newInstance();
+                fragment = HunterHallFragment.newInstance();
             } else if (page == ContentPage.Item3) {
                 fragment = HallFragment.newInstance();
             }

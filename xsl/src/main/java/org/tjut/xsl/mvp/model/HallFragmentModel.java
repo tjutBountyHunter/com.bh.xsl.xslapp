@@ -10,7 +10,16 @@ import com.jess.arms.di.scope.FragmentScope;
 
 import javax.inject.Inject;
 
+import org.tjut.xsl.app.AccountManager;
 import org.tjut.xsl.mvp.contract.HallFragmentContract;
+import org.tjut.xsl.mvp.model.api.service.HallTaskService;
+import org.tjut.xsl.mvp.model.entity.HallTaskCard;
+import org.tjut.xsl.mvp.model.entity.Task;
+
+import java.util.List;
+
+import io.reactivex.Observable;
+import io.reactivex.functions.Function;
 
 
 /**
@@ -45,9 +54,10 @@ public class HallFragmentModel extends BaseModel implements HallFragmentContract
     }
 
     @Override
-    public void requestInitData() {
-        return;
-
-//        mRepositoryManager.obtainRetrofitService()
+    public Observable<List<Task>> requestInitData() {
+        return mRepositoryManager.obtainRetrofitService(HallTaskService.class)
+                .initTaskDataRq(AccountManager.getUserId(), AccountManager.getSchoolName(), 20)
+                .map(new ServerResponseFunc<HallTaskCard>())
+                .map(HallTaskCard::getTaskInfoVos);
     }
 }

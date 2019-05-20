@@ -92,7 +92,7 @@ public class SignUpPresenter extends BasePresenter<SignUpContract.Model, SignUpC
                 .subscribe(new ErrorHandleSubscriber<BaseResponse>(mErrorHandler) {
                     @Override
                     public void onNext(BaseResponse baseResponse) {
-                        mRootView.showMessage(baseResponse.getData(String.class));
+                        mRootView.showMessage(baseResponse.getData().toString());
                     }
                 });
     }

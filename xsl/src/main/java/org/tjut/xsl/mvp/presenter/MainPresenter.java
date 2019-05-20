@@ -1,6 +1,8 @@
 package org.tjut.xsl.mvp.presenter;
 
 import android.app.Application;
+import android.arch.lifecycle.Lifecycle;
+import android.arch.lifecycle.OnLifecycleEvent;
 
 import com.jess.arms.integration.AppManager;
 import com.jess.arms.di.scope.ActivityScope;
@@ -50,4 +52,5 @@ public class MainPresenter extends BasePresenter<MainContract.Model, MainContrac
         this.mImageLoader = null;
         this.mApplication = null;
     }
+
 }

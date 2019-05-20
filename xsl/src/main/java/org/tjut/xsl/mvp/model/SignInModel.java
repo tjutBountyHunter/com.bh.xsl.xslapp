@@ -61,7 +61,7 @@ public class SignInModel extends BaseModel implements SignInContract.Model {
     public Observable<User> getUser(String phone, String passwd, String token) {
         return mRepositoryManager.obtainRetrofitService(SignInService.class)
                 .getUser(phone, passwd, token)
-                .map(new ServerResponseFunc<>(User.class))
+                .map(new ServerResponseFunc<User>())
                 .map(user -> {
                     UserDao userDao = DatabaseManager.getInstance().getUserDao();
                     userDao.insertOrReplace(user);

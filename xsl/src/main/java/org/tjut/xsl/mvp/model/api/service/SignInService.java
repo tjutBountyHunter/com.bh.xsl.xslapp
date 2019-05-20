@@ -15,6 +15,6 @@ public interface SignInService {
 
     @FormUrlEncoded
     @POST(Api.LOGIN)
-    Observable<BaseResponse> getUser(@Field("phone") String phone, @Field("password") String passwd, @Field("token") String token);
+    Observable<BaseResponse<User>> getUser(@Field("phone") String phone, @Field("password") String passwd, @Field("token") String token);
 
 }

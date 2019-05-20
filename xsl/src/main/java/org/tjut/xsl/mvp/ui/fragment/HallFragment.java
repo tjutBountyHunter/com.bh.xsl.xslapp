@@ -2,51 +2,54 @@ package org.tjut.xsl.mvp.ui.fragment;
 
 import android.content.Intent;
 import android.os.Bundle;
-import android.os.Message;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
-import android.support.v4.app.Fragment;
 import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
+import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.ImageView;
+import android.widget.RelativeLayout;
 import android.widget.TextView;
 
-import com.bumptech.glide.Glide;
 import com.chad.library.adapter.base.BaseQuickAdapter;
 import com.chad.library.adapter.base.BaseViewHolder;
 import com.jess.arms.base.BaseFragment;
 import com.jess.arms.di.component.AppComponent;
 import com.jess.arms.http.imageloader.ImageConfig;
-import com.jess.arms.http.imageloader.ImageLoader;
-import com.jess.arms.http.imageloader.ImageLoader_Factory;
-import com.jess.arms.http.imageloader.glide.GlideImageLoaderStrategy;
 import com.jess.arms.http.imageloader.glide.ImageConfigImpl;
-import com.jess.arms.integration.ConfigModule;
 import com.jess.arms.utils.ArmsUtils;
+import com.qmuiteam.qmui.util.QMUIDisplayHelper;
 import com.qmuiteam.qmui.widget.QMUIEmptyView;
 import com.qmuiteam.qmui.widget.QMUIFloatLayout;
 import com.qmuiteam.qmui.widget.QMUIRadiusImageView;
+import com.qmuiteam.qmui.widget.dialog.QMUIDialog;
+import com.qmuiteam.qmui.widget.dialog.QMUIDialogAction;
+import com.qmuiteam.qmui.widget.dialog.QMUITipDialog;
 import com.qmuiteam.qmui.widget.roundwidget.QMUIRoundButton;
 
 import org.tjut.xsl.app.AccountManager;
-import org.tjut.xsl.app.Tea;
 import org.tjut.xsl.di.component.DaggerHallFragmentComponent;
 import org.tjut.xsl.mvp.contract.HallFragmentContract;
-import org.tjut.xsl.mvp.model.entity.HallTaskCard;
+import org.tjut.xsl.mvp.model.entity.Tag;
+import org.tjut.xsl.mvp.model.entity.Task;
 import org.tjut.xsl.mvp.presenter.HallFragmentPresenter;
 
 import org.tjut.xsl.R;
+import org.tjut.xsl.mvp.ui.activity.ConfirmActivity;
+import org.tjut.xsl.mvp.ui.activity.SchoolActivity;
+import org.tjut.xsl.mvp.ui.widget.TaskTagView;
+import org.tjut.xsl.mvp.ui.widget.YMULevelText;
 
-import java.text.DateFormat;
 import java.util.List;
 import java.util.Objects;
 
 import butterknife.BindView;
+import butterknife.OnClick;
+import timber.log.Timber;
 
 import static com.jess.arms.utils.Preconditions.checkNotNull;
 
@@ -66,10 +69,8 @@ import static com.jess.arms.utils.Preconditions.checkNotNull;
 public class HallFragment extends BaseFragment<HallFragmentPresenter> implements HallFragmentContract.View {
 
     public final static int SCHOOL_REQUEST_CODE = 1;
-    public final static String TAG = "HallFragment";
+    public final static String TAG = HallFragment.class.getSimpleName();
     private int mCurrentDialogStyle = com.qmuiteam.qmui.R.style.QMUI_Dialog;
-
-    private ImageConfigImpl mImageConfig;
 
     @BindView(R.id.rev_task)
     RecyclerView tasksView = null;
@@ -85,6 +86,35 @@ public class HallFragment extends BaseFragment<HallFragmentPresenter> implements
     @BindView(R.id.iv_touxiang)
     QMUIRadiusImageView mTouXiangImageView;
     private QMUIEmptyView mEmptyView;
+    private View header;
+    private TextView footerView;
+
+    private QMUITipDialog mConfirmDialog;
+
+    @OnClick(R.id.iv_add_task)
+    void ClickaddTask() {
+        if (checkPermission()) {
+
+        } else {
+            showNotConfirmView();
+        }
+    }
+
+    private boolean checkPermission() {
+        return AccountManager.NORMAL_STATE != AccountManager.getState();
+    }
+
+    private void showNotConfirmView() {
+        new QMUIDialog.MessageDialogBuilder(getActivity())
+                .setTitle("用户认证")
+                .setMessage("你还没有认证，不能发布任务")
+                .addAction("取消", (dialog, index) -> dialog.dismiss())
+                .addAction("去认证", (dialog, index) -> {
+                    dialog.dismiss();
+                    launchActivity(new Intent(mContext, ConfirmActivity.class));
+                })
+                .create(mCurrentDialogStyle).show();
+    }
 
     public static HallFragment newInstance() {
         HallFragment fragment = new HallFragment();
@@ -108,6 +138,7 @@ public class HallFragment extends BaseFragment<HallFragmentPresenter> implements
 
     @Override
     public void initData(@Nullable Bundle savedInstanceState) {
+        mEmptyView = new QMUIEmptyView(mContext);
         refresh.setOnRefreshListener(refreshListener);
         setAdapter();
         Objects.requireNonNull(mPresenter).initData();
@@ -116,66 +147,36 @@ public class HallFragment extends BaseFragment<HallFragmentPresenter> implements
 
     private void setAdapter() {
         adapter = new TaskAdapter(R.layout.item_task_card);
-        View header = LayoutInflater.from(getContext()).inflate(R.layout.item_hall_header, null, false);
-        adapter.addHeaderView(header);
-        mEmptyView = new QMUIEmptyView(mContext);
-        if (true) {
-            mEmptyView.setTitleText("少侠何门何派");
-            mEmptyView.setButton("速去登记", new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-
-                }
-            });
-        } else if (AccountManager.NORMAL_STATE == AccountManager.getState()) {
-            mEmptyView.setTitleText("没有更多数据啦");
-        }
-        adapter.setEmptyView(mEmptyView);
-
         adapter.setOnItemClickListener((adapter, view, position) -> {
-        });
 
+        });
         adapter.setOnItemChildClickListener((adapter, view, position) -> {
             if (view instanceof QMUIRoundButton) {
             }
         });
-
         tasksView.setLayoutManager(new LinearLayoutManager(getContext()));
         tasksView.setAdapter(adapter);
 
+        header = LayoutInflater.from(getContext()).inflate(R.layout.item_hall_header, null, false);
+
+        footerView = new TextView(mContext);
+        footerView.setText("没有更多数据啦");
+        RelativeLayout.LayoutParams lp =
+                new RelativeLayout.LayoutParams(RelativeLayout.LayoutParams.MATCH_PARENT,
+                        RelativeLayout.LayoutParams.WRAP_CONTENT);
+        footerView.setLayoutParams(lp);
+        int padd = QMUIDisplayHelper.dp2px(mContext, 4);
+        footerView.setPadding(0, padd, 0, padd);
+        footerView.setGravity(Gravity.CENTER);
     }
 
 
     SwipeRefreshLayout.OnRefreshListener refreshListener = () -> {
+        Objects.requireNonNull(mPresenter).initData();
     };
 
+
     /**
-     * 通过此方法可以使 Fragment 能够与外界做一些交互和通信, 比如说外部的 Activity 想让自己持有的某个 Fragment 对象执行一些方法,
-     * 建议在有多个需要与外界交互的方法时, 统一传 {@link Message}, 通过 what 字段来区分不同的方法, 在 {@link #setData(Object)}
-     * 方法中就可以 {@code switch} 做不同的操作, 这样就可以用统一的入口方法做多个不同的操作, 可以起到分发的作用
-     * <p>
-     * 调用此方法时请注意调用时 Fragment 的生命周期, 如果调用 {@link #setData(Object)} 方法时 {@link Fragment#onCreate(Bundle)} 还没执行
-     * 但在 {@link #setData(Object)} 里却调用了 Presenter 的方法, 是会报空的, 因为 Dagger 注入是在 {@link Fragment#onCreate(Bundle)} 方法中执行的
-     * 然后才创建的 Presenter, 如果要做一些初始化操作,可以不必让外部调用 {@link #setData(Object)}, 在 {@link #initData(Bundle)} 中初始化就可以了
-     * <p>
-     * Example usage:
-     * <pre>
-     * public void setData(@Nullable Object data) {
-     *     if (data != null && data instanceof Message) {
-     *         switch (((Message) data).what) {
-     *             case 0:
-     *                 loadData(((Message) data).arg1);
-     *                 break;
-     *             case 1:
-     *                 refreshUI();
-     *                 break;
-     *             default:
-     *                 //do something
-     *                 break;
-     *         }
-     *     }
-     * }
-     *
      * // call setData(Object):
      * Message data = new Message();
      * data.what = 0;
@@ -192,12 +193,14 @@ public class HallFragment extends BaseFragment<HallFragmentPresenter> implements
 
     @Override
     public void showLoading() {
-
+        if (refresh != null)
+            refresh.setRefreshing(true);
     }
 
     @Override
     public void hideLoading() {
-
+        if (refresh != null)
+            refresh.setRefreshing(false);
     }
 
     @Override
@@ -219,29 +222,95 @@ public class HallFragment extends BaseFragment<HallFragmentPresenter> implements
 
     @Override
     public ImageConfig getImageConfig() {
-        if (mImageConfig == null) {
-            mImageConfig = ImageConfigImpl.builder()
-                    .url(AccountManager.getTxUrl())
-                    .imageView(mTouXiangImageView)
-                    .placeholder("男".equals(AccountManager.getSex()) ? R.drawable.default_tx_man : R.drawable.default_tx_woman)
-                    .build();
-        }
-        return mImageConfig;
+        return ImageConfigImpl.builder()
+                .url(AccountManager.getTxUrl())
+                .imageView(mTouXiangImageView)
+                .placeholder("男".equals(AccountManager.getSex()) ? R.drawable.default_tx_man : R.drawable.default_tx_woman)
+                .build();
+    }
+
+    @Override
+    public void showInitData(List<Task> tasks) {
+        adapter.setHeaderView(header);
+        adapter.replaceData(tasks);
+        adapter.setFooterView(footerView);
+    }
+
+    @Override
+    public void showNotSchool() {
+        mEmptyView.setTitleText("少侠何门何派");
+        mEmptyView.setButton("速去登记", new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(getActivity(), SchoolActivity.class);
+                intent.putExtra("RequestType", SchoolActivity.REQUEST_TYPE_SCHOOL);
+                startActivityForResult(intent, SCHOOL_REQUEST_CODE);
+            }
+        });
+        adapter.setEmptyView(mEmptyView);
+    }
+
+    @Override
+    public void showEmptyView() {
+        mEmptyView.setTitleText("没有任务啦，快去发布任务吧");
+        adapter.setEmptyView(mEmptyView);
     }
 
 
-    class TaskAdapter extends BaseQuickAdapter<HallTaskCard, BaseViewHolder> {
-
-        public TaskAdapter(int layoutResId, @Nullable List<HallTaskCard> data) {
-            super(layoutResId, data);
+    @Override
+    public void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        if (requestCode == SCHOOL_REQUEST_CODE) {
+            if (resultCode == SchoolActivity.RESULT_CODE) {
+                Objects.requireNonNull(mPresenter).initData();
+            }
         }
+    }
+
+    class TaskAdapter extends BaseQuickAdapter<Task, BaseViewHolder> {
 
         public TaskAdapter(int layoutResId) {
             super(layoutResId);
         }
 
         @Override
-        protected void convert(BaseViewHolder helper, HallTaskCard item) {
+        protected void convert(BaseViewHolder helper, Task item) {
+            QMUIRadiusImageView txView = helper.getView(R.id.iv_tx);
+            ImageConfigImpl imageConfig = ImageConfigImpl.builder()
+                    .url(item.getTxUrl())
+                    .imageView(txView)
+                    .placeholder("男".equals(AccountManager.getSex()) ? R.drawable.default_tx_man : R.drawable.default_tx_woman)
+                    .build();
+            Objects.requireNonNull(mPresenter).loadTaskItemTx(imageConfig);
+
+            helper.setText(R.id.tv_name, item.getName());
+
+            YMULevelText ymuLevelText = helper.getView(R.id.ym_level);
+            ymuLevelText.setmText("雇主");
+            ymuLevelText.setmNumText(String.valueOf(item.getMasterlevel()));
+
+            helper.setText(R.id.tv_task_content, item.getContent());
+            helper.setText(R.id.tv_task_title, item.getTaskTitle());
+            helper.setText(R.id.tv_task_money, "¥" + item.getMoney());
+
+            helper.setText(R.id.tv_deadline_time, "截止时间：" + item.getDeadLineDate());
+
+            helper.setText(R.id.tv_task_time, item.getCreateDate());
+            TaskTagView taskTagView;
+            QMUIFloatLayout tagsFloatLayout = helper.getView(R.id.fl_task_tags);
+            List<Tag> tags = item.getTags();
+            tagsFloatLayout.removeAllViews();
+            if (tags != null && !tags.isEmpty()) {
+                for (Tag tag :
+                        tags) {
+                    taskTagView = new TaskTagView(getContext());
+                    taskTagView.setText(tag.getTagName());
+                    tagsFloatLayout.addView(taskTagView);
+                }
+            }
+
+            helper.setText(R.id.bt_recive_task, "接")
+                    .addOnClickListener(R.id.bt_recive_task);
 
         }
     }
