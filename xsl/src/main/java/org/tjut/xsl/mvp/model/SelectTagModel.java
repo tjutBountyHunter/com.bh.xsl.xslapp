@@ -75,13 +75,13 @@ public class SelectTagModel extends BaseModel implements SelectTagContract.Model
                 })
                 .map(tags -> {
                     for (Tag tag : tags) {
-                        tagNames.add(tag.getTagName());
+                        tagNames.add(tag.getTagid());
                     }
                     return tagNames;
                 })
                 .flatMap((Function<List<String>, ObservableSource<BaseResponse<List<Tag>>>>) strings -> {
                     JSONObject jsonData = new JSONObject();
-                    jsonData.put("tagNum", 20);
+                    jsonData.put("tagNum", size);
                     jsonData.put("obtainedTags", strings);
                     return mRepositoryManager.obtainRetrofitService(TagService.class)
                             .getTags(RequestBody.create(MediaType.parse("application/json;charset=UTF-8"), jsonData.toJSONString()));
@@ -89,7 +89,7 @@ public class SelectTagModel extends BaseModel implements SelectTagContract.Model
                 .map(new ServerResponseFunc<List<Tag>>())
                 .map(tags -> {
                     TAG_BEANS.addAll(tags);
-                    return TAG_BEANS;
+                    return tags;
                 });
     }
 }

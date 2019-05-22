@@ -84,7 +84,11 @@ public class SelectTagPresenter extends BasePresenter<SelectTagContract.Model, S
                 .subscribe(new ErrorHandleSubscriber<List<Tag>>(mErrorHandler) {
                     @Override
                     public void onNext(List<Tag> tags) {
-                        mRootView.showTags(tags);
+                        if ((tags == null || tags.isEmpty())) {
+                            initTagsData();
+                        }else {
+                            mRootView.showTags(tags);
+                        }
                     }
                 });
     }

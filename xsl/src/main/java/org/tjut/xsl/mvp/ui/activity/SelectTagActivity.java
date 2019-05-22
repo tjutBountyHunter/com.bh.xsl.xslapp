@@ -179,6 +179,7 @@ public class SelectTagActivity extends BaseActivity<SelectTagPresenter> implemen
             mContainer.setVisibility(View.VISIBLE);
             mEmptyView.setVisibility(View.GONE);
             TagView textView;
+            tagsFloat.removeAllViews();
             for (Tag tag :
                     tags) {
                 textView = new TagView(this);
@@ -187,8 +188,12 @@ public class SelectTagActivity extends BaseActivity<SelectTagPresenter> implemen
                 textView.setOnClickListener(listener);
                 ViewGroup.LayoutParams lp = new ViewGroup.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT);
                 tagsFloat.addView(textView, lp);
+                TagView tagView;
                 for (int i = 0; i < selectedTagsFloat.getChildCount(); i++) {
-                    if (textView.getText().toString().equals(((TagView) selectedTagsFloat.getChildAt(i)).getText().toString())) {
+                    tagView = (TagView) selectedTagsFloat.getChildAt(i);
+                    if (textView.getText().toString().equals(tagView.getText().toString())) {
+                        TAG_VIEW_MAP.remove(tagView);
+                        TAG_VIEW_MAP.put(tagView, textView);
                         textView.setSelected(true);
                     }
                 }
