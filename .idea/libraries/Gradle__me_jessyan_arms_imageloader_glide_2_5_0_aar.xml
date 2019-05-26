@@ -1,0 +1,12 @@
+<component name="libraryTable">
+  <library name="Gradle: me.jessyan:arms-imageloader-glide:2.5.0@aar">
+    <CLASSES>
+      <root url="jar://C:/User/zlm315/.gradle/caches/transforms-2/files-2.1/132571c2556ecec8087ef1bd1f79b0ef/jars/classes.jar!/" />
+      <root url="file://C:/User/zlm315/.gradle/caches/transforms-2/files-2.1/132571c2556ecec8087ef1bd1f79b0ef/res" />
+    </CLASSES>
+    <JAVADOC />
+    <SOURCES>
+      <root url="jar://C:/User/zlm315/.gradle/caches/modules-2/files-2.1/me.jessyan/arms-imageloader-glide/2.5.0/2f00f4f1761b34d761b187696cba274f85a96b82/arms-imageloader-glide-2.5.0-sources.jar!/" />
+    </SOURCES>
+  </library>
+</component>

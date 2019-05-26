@@ -1,0 +1,15 @@
+<component name="libraryTable">
+  <library name="Gradle: com.qmuiteam:qmui:1.2.0@aar">
+    <ANNOTATIONS>
+      <root url="jar://C:/User/zlm315/.gradle/caches/transforms-2/files-2.1/9629c47a0593280d6612be23a0a85454/annotations.zip!/" />
+    </ANNOTATIONS>
+    <CLASSES>
+      <root url="jar://C:/User/zlm315/.gradle/caches/transforms-2/files-2.1/9629c47a0593280d6612be23a0a85454/jars/classes.jar!/" />
+      <root url="file://C:/User/zlm315/.gradle/caches/transforms-2/files-2.1/9629c47a0593280d6612be23a0a85454/res" />
+    </CLASSES>
+    <JAVADOC />
+    <SOURCES>
+      <root url="jar://C:/User/zlm315/.gradle/caches/modules-2/files-2.1/com.qmuiteam/qmui/1.2.0/61228222c4a7d57387ec2e1dd8e86a96488270b6/qmui-1.2.0-sources.jar!/" />
+    </SOURCES>
+  </library>
+</component>

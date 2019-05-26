@@ -27,6 +27,7 @@ import org.tjut.xsl.R;
 
 import butterknife.BindView;
 import butterknife.OnClick;
+import timber.log.Timber;
 
 import static com.jess.arms.utils.Preconditions.checkNotNull;
 
@@ -217,7 +218,7 @@ public class SignUpActivity extends BaseActivity<SignUpPresenter> implements Sig
     }
 
     @Override
-    public void onTimerComplet() {
+    public void onTimerComplete() {
         runOnUiThread(() -> {
             mActionCode.setEnabled(true);
             mActionCode.setTextColor(getResources().getColor(R.color.app_color_blue));

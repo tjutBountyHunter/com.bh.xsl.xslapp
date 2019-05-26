@@ -1,0 +1,12 @@
+<component name="libraryTable">
+  <library name="Gradle: me.jessyan:arms:2.5.0@aar">
+    <CLASSES>
+      <root url="file://C:/User/zlm315/.gradle/caches/transforms-2/files-2.1/7bd3085fc5051e755ddbef849f3b6542/res" />
+      <root url="jar://C:/User/zlm315/.gradle/caches/transforms-2/files-2.1/7bd3085fc5051e755ddbef849f3b6542/jars/classes.jar!/" />
+    </CLASSES>
+    <JAVADOC />
+    <SOURCES>
+      <root url="jar://C:/User/zlm315/.gradle/caches/modules-2/files-2.1/me.jessyan/arms/2.5.0/d6dc48897fcb9dc0fccb89c0f6e18b4b1dab5adb/arms-2.5.0-sources.jar!/" />
+    </SOURCES>
+  </library>
+</component>

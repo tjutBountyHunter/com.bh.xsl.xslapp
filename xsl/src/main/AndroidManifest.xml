@@ -32,7 +32,8 @@
         android:networkSecurityConfig="@xml/network_security_config"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
-        <activity android:name=".mvp.ui.activity.SelectTagActivity"></activity>
+        <activity android:name=".mvp.ui.activity.ChangePasswordActivity"></activity>
+        <activity android:name=".mvp.ui.activity.SelectTagActivity" />
         <activity android:name=".mvp.ui.activity.ConfirmActivity" />
         <activity android:name=".mvp.ui.activity.SchoolActivity" />
         <activity android:name=".mvp.ui.activity.MainActivity" />

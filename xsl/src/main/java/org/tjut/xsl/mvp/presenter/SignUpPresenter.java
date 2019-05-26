@@ -1,6 +1,7 @@
 package org.tjut.xsl.mvp.presenter;
 
 import android.app.Application;
+import android.util.Log;
 
 import com.jess.arms.integration.AppManager;
 import com.jess.arms.di.scope.ActivityScope;
@@ -11,9 +12,6 @@ import com.jess.arms.utils.RxLifecycleUtils;
 import cn.jpush.android.api.JPushInterface;
 import io.reactivex.ObservableSource;
 import io.reactivex.android.schedulers.AndroidSchedulers;
-import io.reactivex.disposables.Disposable;
-import io.reactivex.functions.Action;
-import io.reactivex.functions.Consumer;
 import io.reactivex.functions.Function;
 import io.reactivex.schedulers.Schedulers;
 import me.jessyan.rxerrorhandler.core.RxErrorHandler;
@@ -132,7 +130,7 @@ public class SignUpPresenter extends BasePresenter<SignUpContract.Model, SignUpC
                     mTimer.cancel();
                     mTimer = null;
                 }
-                mRootView.onTimerComplet();
+                mRootView.onTimerComplete();
             }
         }
     }

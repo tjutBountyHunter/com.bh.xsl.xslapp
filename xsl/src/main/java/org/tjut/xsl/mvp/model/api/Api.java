@@ -33,6 +33,8 @@ public interface Api {
 
     String QUICK_REGISTER = USER_PATH + "quickRegister";
 
+    String CHANGE_PASSWORD = "";
+
     String REQUEST_TASKS_INIT = ROOT_PATH + "task/initTaskInfo";
 
     String MY_HISTORY_HUNTER = ROOT_PATH + "hunter/queryHistoryHunter";

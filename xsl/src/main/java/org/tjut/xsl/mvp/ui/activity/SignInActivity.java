@@ -8,6 +8,7 @@ import android.text.Editable;
 import android.text.TextWatcher;
 import android.view.View;
 import android.widget.EditText;
+import android.widget.TextView;
 
 import com.jess.arms.base.BaseActivity;
 import com.jess.arms.di.component.AppComponent;
@@ -23,10 +24,9 @@ import org.tjut.xsl.mvp.presenter.SignInPresenter;
 import org.tjut.xsl.R;
 
 
-import javax.inject.Inject;
-
 import butterknife.BindView;
 import cn.jpush.android.api.JPushInterface;
+import timber.log.Timber;
 
 import static com.jess.arms.utils.Preconditions.checkNotNull;
 
@@ -59,6 +59,8 @@ public class SignInActivity extends BaseActivity<SignInPresenter> implements Sig
     QMUIRoundButton mSignInButton;
     @BindView(R.id.bt_action_sign_up_link)
     QMUIRoundButton mSignUpButton;
+    @BindView(R.id.tv_forget_password_link)
+    TextView mChangPsdTv;
 
     @Override
     public void setupActivityComponent(@NonNull AppComponent appComponent) {
@@ -79,7 +81,7 @@ public class SignInActivity extends BaseActivity<SignInPresenter> implements Sig
     public void initData(@Nullable Bundle savedInstanceState) {
         initTopBar();
         initTipDialog();
-        setListenter();
+        setListener();
     }
 
     private void initTipDialog() {
@@ -89,11 +91,12 @@ public class SignInActivity extends BaseActivity<SignInPresenter> implements Sig
                 .create();
     }
 
-    private void setListenter() {
+    private void setListener() {
         mSignInButton.setOnClickListener(this);
         mSignUpButton.setOnClickListener(this);
         mPhoneEditText.addTextChangedListener(this);
         mPasswdEditText.addTextChangedListener(this);
+        mChangPsdTv.setOnClickListener(this);
     }
 
     private void initTopBar() {
@@ -140,6 +143,8 @@ public class SignInActivity extends BaseActivity<SignInPresenter> implements Sig
             case R.id.bt_action_sign_up_link:
                 launchActivity(new Intent(SignInActivity.this, SignUpActivity.class));
                 break;
+            case R.id.tv_forget_password_link:
+                launchActivity(new Intent(SignInActivity.this, ChangePasswordActivity.class));
             default:
                 break;
         }
