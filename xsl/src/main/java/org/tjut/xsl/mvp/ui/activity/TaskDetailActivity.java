@@ -11,7 +11,6 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.TextView;
 
-import com.bumptech.glide.Glide;
 import com.jess.arms.base.BaseActivity;
 import com.jess.arms.di.component.AppComponent;
 import com.jess.arms.http.imageloader.ImageConfig;
@@ -26,7 +25,7 @@ import com.qmuiteam.qmui.widget.textview.QMUILinkTextView;
 import org.tjut.xsl.app.AccountManager;
 import org.tjut.xsl.di.component.DaggerTaskDetailComponent;
 import org.tjut.xsl.mvp.contract.TaskDetailContract;
-import org.tjut.xsl.mvp.model.entity.Task;
+import org.tjut.xsl.mvp.model.entity.Master;
 import org.tjut.xsl.mvp.model.entity.TaskDetail;
 import org.tjut.xsl.mvp.model.entity.TaskStats;
 import org.tjut.xsl.mvp.presenter.TaskDetailPresenter;
@@ -34,7 +33,6 @@ import org.tjut.xsl.mvp.presenter.TaskDetailPresenter;
 import org.tjut.xsl.R;
 
 
-import java.text.SimpleDateFormat;
 import java.util.Objects;
 
 import butterknife.BindView;
@@ -178,12 +176,6 @@ public class TaskDetailActivity extends BaseActivity<TaskDetailPresenter> implem
         TASK_STATS = taskDetail.getState();
         mTaskEnterButton.setOnClickListener(listener);
 
-        Objects.requireNonNull(mPresenter).loadMasterTx(ImageConfigImpl.builder()
-                .url(taskDetail.getMasterInfo().getTxUrl())
-                .imageView(mMasterTxView)
-                .placeholder("男".equals(AccountManager.getSex()) ? R.drawable.default_tx_man : R.drawable.default_tx_woman)
-                .build());
-
         if (taskDetail.getHunterInfo() != null) {
             HUNTER_ID = taskDetail.getHunterInfo().getHunterid();
 //            Glide.with(this).load(taskDetail.getHunterInfo().getTxUrl()).into(mHunterTxView);
@@ -201,7 +193,20 @@ public class TaskDetailActivity extends BaseActivity<TaskDetailPresenter> implem
             mHunterSe.setVisibility(View.GONE);
         }
         Timber.d(AccountManager.getHunterId() + " " + HUNTER_ID);
-        String userId = taskDetail.getMasterInfo().getUserid();
+
+        String userId = "0";
+        if (taskDetail.getMasterInfo() != null){
+            Master master = taskDetail.getMasterInfo();
+            userId = master.getUserid();
+
+        }
+
+        Objects.requireNonNull(mPresenter).loadMasterTx(ImageConfigImpl.builder()
+                .url(taskDetail.getMasterInfo() != null ? taskDetail.getMasterInfo().getTxUrl() : "")
+                .imageView(mMasterTxView)
+                .placeholder("男".equals(AccountManager.getSex()) ? R.drawable.default_tx_man : R.drawable.default_tx_woman)
+                .build());
+
         mLinkTextView.setVisibility(View.GONE);
         if (TASK_STATS == TaskStats.PENDING_RECEPTION.ordinal()   // 未接
                 || TASK_STATS == TaskStats.PENDING_RECEPTION_ALGORITHM.ordinal()) {
@@ -267,8 +272,8 @@ public class TaskDetailActivity extends BaseActivity<TaskDetailPresenter> implem
         mTaskTitle.setText(taskDetail.getTaskTitle());
         mTaskContent.setText(taskDetail.getContent());
 
-        mMasterName.setText(taskDetail.getMasterInfo().getName());
-        String s = "联系电话：" + taskDetail.getMasterInfo().getPhone();
+        mMasterName.setText(taskDetail.getMasterInfo() != null ? taskDetail.getMasterInfo().getName() : "未知用户");
+        String s = "联系电话：" + (taskDetail.getMasterInfo() != null ? taskDetail.getMasterInfo().getPhone() : "未知号码");
         mLinkTextView.setText(s);
         s = "¥" + taskDetail.getMoney();
         mTaskMoney.setText(s);
