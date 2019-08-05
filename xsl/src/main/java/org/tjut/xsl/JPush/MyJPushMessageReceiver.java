@@ -6,12 +6,14 @@ import android.os.IBinder;
 
 import cn.jpush.android.api.JPushMessage;
 import cn.jpush.android.service.JPushMessageReceiver;
+import timber.log.Timber;
 
 public class MyJPushMessageReceiver extends JPushMessageReceiver {
 
     @Override
     public void onTagOperatorResult(Context context, JPushMessage jPushMessage) {
         super.onTagOperatorResult(context, jPushMessage);
+        Timber.d(jPushMessage.getTags().toString());
     }
 
     @Override

@@ -4,8 +4,12 @@ import org.greenrobot.greendao.annotation.Entity;
 import org.greenrobot.greendao.annotation.Id;
 import org.greenrobot.greendao.annotation.Generated;
 
+import java.io.Serializable;
+
 @Entity
-public class Major {
+public class Major implements Serializable {
+
+    private static final long serialVersionUID = 1L;
     @Id
     private Long id;
 

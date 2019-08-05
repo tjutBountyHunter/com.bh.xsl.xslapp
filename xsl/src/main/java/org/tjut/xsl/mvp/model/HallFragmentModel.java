@@ -16,6 +16,7 @@ import org.tjut.xsl.mvp.model.api.service.HallTaskService;
 import org.tjut.xsl.mvp.model.entity.HallTaskCard;
 import org.tjut.xsl.mvp.model.entity.Task;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import io.reactivex.Observable;
@@ -57,7 +58,14 @@ public class HallFragmentModel extends BaseModel implements HallFragmentContract
     public Observable<List<Task>> requestInitData() {
         return mRepositoryManager.obtainRetrofitService(HallTaskService.class)
                 .initTaskDataRq(AccountManager.getUserId(), AccountManager.getSchoolName(), 20)
-                .map(new ServerResponseFunc<HallTaskCard>())
+                .map(new ServerResponseFunc<>())
                 .map(HallTaskCard::getTaskInfoVos);
+    }
+
+    @Override
+    public Observable<String> reciveTask(String taskid, String hunterId) {
+        return mRepositoryManager.obtainRetrofitService(HallTaskService.class)
+                .reciveTask(taskid, hunterId)
+                .map(new ServerResponseFunc<>());
     }
 }

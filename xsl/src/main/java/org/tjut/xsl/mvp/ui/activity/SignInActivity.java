@@ -62,7 +62,7 @@ public class SignInActivity extends BaseActivity<SignInPresenter> implements Sig
 
     @Override
     public void setupActivityComponent(@NonNull AppComponent appComponent) {
-        DaggerSignInComponent //如找不到该类,请编译一下项目
+        DaggerSignInComponent
                 .builder()
                 .appComponent(appComponent)
                 .view(this)

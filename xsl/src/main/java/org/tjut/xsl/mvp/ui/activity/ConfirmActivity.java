@@ -22,6 +22,7 @@ import com.qmuiteam.qmui.widget.grouplist.QMUIGroupListView;
 
 import org.tjut.xsl.di.component.DaggerConfirmComponent;
 import org.tjut.xsl.mvp.contract.ConfirmContract;
+import org.tjut.xsl.mvp.model.entity.Tag;
 import org.tjut.xsl.mvp.model.entity.User;
 import org.tjut.xsl.mvp.presenter.ConfirmPresenter;
 
@@ -29,11 +30,14 @@ import org.tjut.xsl.R;
 import org.tjut.xsl.mvp.ui.widget.TagView;
 
 
+import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Objects;
 
 import butterknife.BindView;
 import butterknife.OnClick;
+import timber.log.Timber;
 
 import static com.jess.arms.utils.Preconditions.checkNotNull;
 
@@ -79,11 +83,7 @@ public class ConfirmActivity extends BaseActivity<ConfirmPresenter> implements C
 
     @OnClick(R.id.tv_enter)
     void onEnter() {
-//        if (checkForm()) {
-//            presenter.upLoadForm();
-//        } else {
-//            Toast.makeText(authActivity.this, "请补全信息", Toast.LENGTH_SHORT).show();
-//        }
+        Objects.requireNonNull(mPresenter).checkInfoForm();
     }
 
 
@@ -231,6 +231,22 @@ public class ConfirmActivity extends BaseActivity<ConfirmPresenter> implements C
     }
 
     @Override
+    public void showConfirmSuccess() {
+        showMessage("认证成功");
+        setResult(REQUEST_CODE);
+        killMyself();
+    }
+
+    @Override
+    public void showSelectTags(ArrayList<String> tagNames) {
+        mTagsFloatLayoutView.removeAllViews();
+        for (String tagNam :
+                tagNames) {
+            addItemToLayout(mTagsFloatLayoutView, tagNam);
+        }
+    }
+
+    @Override
     public void showLoading() {
         tipDialog.show();
     }
@@ -264,5 +280,25 @@ public class ConfirmActivity extends BaseActivity<ConfirmPresenter> implements C
     @Override
     public void killMyself() {
         finish();
+    }
+
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        if (requestCode == REQUEST_CODE) {
+            if (resultCode == SelectTagActivity.RESULT_CODE) {
+                ArrayList<String> tagIds = data != null ? data.getStringArrayListExtra("tagIds") : null;
+                ArrayList<String> tagNames = data != null ? data.getStringArrayListExtra("tagNams") : null;
+                List<Tag> tags = new ArrayList<>();
+                if (tagNames != null && tagIds != null) {
+                    for (int i = 0; i < tagNames.size(); i++) {
+                        tags.add(new Tag(tagIds.get(i), tagNames.get(i)));
+                        Timber.d(tagIds.get(i) + "  "+tagNames.get(i));
+                    }
+                }
+                Objects.requireNonNull(mPresenter).saveUserTags(tags);
+            }
+        }
     }
 }

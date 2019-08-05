@@ -17,9 +17,11 @@ import me.jessyan.rxerrorhandler.handler.ErrorHandleSubscriber;
 
 import javax.inject.Inject;
 
+import org.tjut.xsl.app.AccountManager;
 import org.tjut.xsl.mvp.contract.SelectTagContract;
 import org.tjut.xsl.mvp.model.entity.Tag;
 
+import java.util.ArrayList;
 import java.util.List;
 
 
@@ -86,7 +88,7 @@ public class SelectTagPresenter extends BasePresenter<SelectTagContract.Model, S
                     public void onNext(List<Tag> tags) {
                         if ((tags == null || tags.isEmpty())) {
                             initTagsData();
-                        }else {
+                        } else {
                             mRootView.showTags(tags);
                         }
                     }
@@ -101,4 +103,25 @@ public class SelectTagPresenter extends BasePresenter<SelectTagContract.Model, S
         this.mImageLoader = null;
         this.mApplication = null;
     }
+
+    public void createTag(CharSequence text) {
+        mModel.createTag(text)
+                .subscribeOn(Schedulers.io())
+                .doOnSubscribe(disposable -> {
+                    mRootView.showLoading();
+                })
+                .subscribeOn(AndroidSchedulers.mainThread())
+                .observeOn(AndroidSchedulers.mainThread())
+                .doFinally(() -> mRootView.hideLoading())
+                .compose(RxLifecycleUtils.bindToLifecycle(mRootView))//使用 Rxlifecycle,使 Disposable 和 Activity 一起销毁
+                .subscribe(new ErrorHandleSubscriber<Tag>(mErrorHandler) {
+                    @Override
+                    public void onNext(Tag tag) {
+                        if (tag != null)
+                            mRootView.addTag(tag);
+                    }
+                });
+
+    }
+
 }

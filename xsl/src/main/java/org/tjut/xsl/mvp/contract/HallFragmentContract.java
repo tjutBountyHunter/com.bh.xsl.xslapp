@@ -8,6 +8,7 @@ import org.tjut.xsl.mvp.model.entity.Task;
 
 import java.util.List;
 
+import io.reactivex.Completable;
 import io.reactivex.Observable;
 
 
@@ -35,11 +36,15 @@ public interface HallFragmentContract {
         void showNotSchool();
 
         void showEmptyView();
+
+        void showReciveSuccess(String taskId);
     }
 
     //Model层定义接口,外部只需关心Model返回的数据,无需关心内部细节,即是否使用缓存
     interface Model extends IModel {
 
         Observable<List<Task>> requestInitData();
+
+        Observable<String> reciveTask(String taskid, String hunterId);
     }
 }

@@ -36,6 +36,8 @@ import java.lang.reflect.Type;
  * ================================================
  */
 public class BaseResponse<T> implements Serializable {
+
+    private static final long serialVersionUID = 1L;
     private T data;
     private Integer status;
     private String msg;
@@ -63,7 +65,7 @@ public class BaseResponse<T> implements Serializable {
      * @return
      */
     public boolean isSuccess() {
-        if (status.equals(Api.RequestSuccess)) {
+        if (Api.RequestSuccess.equals(status)) {
             return true;
         } else {
             return false;

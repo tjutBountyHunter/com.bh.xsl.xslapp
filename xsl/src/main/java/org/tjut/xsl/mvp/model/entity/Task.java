@@ -1,11 +1,15 @@
 package org.tjut.xsl.mvp.model.entity;
 
+import com.google.gson.annotations.SerializedName;
+
 import org.greenrobot.greendao.annotation.Entity;
 import org.greenrobot.greendao.annotation.Id;
 import org.greenrobot.greendao.annotation.JoinEntity;
+import org.greenrobot.greendao.annotation.JoinProperty;
 import org.greenrobot.greendao.annotation.ToMany;
 import org.greenrobot.greendao.annotation.Transient;
 
+import java.io.Serializable;
 import java.util.Date;
 import java.util.List;
 
@@ -13,17 +17,23 @@ import org.greenrobot.greendao.annotation.Generated;
 import org.greenrobot.greendao.DaoException;
 
 @Entity
-public class Task {
+public class Task implements Serializable {
+
+    private static final long serialVersionUID = 1L;
 
     @Id
+    @SerializedName(value = "taskId",alternate = {"taskid"})
     private String taskId;
 
     private Long HallTaskId;
 
+    @SerializedName(value = "taskTitle", alternate = {"tasktitle"})
     private String taskTitle;
 
+    @SerializedName(value = "createDate", alternate = {"createdate"})
     private String createDate;
 
+    @SerializedName(value = "deadLineDate", alternate = {"deadLinedate","deadline"})
     private String deadLineDate;
 
     private String updatedate;
@@ -50,6 +60,9 @@ public class Task {
 
     private Integer masterlevel;
 
+    @Transient
+    private List<String> images;
+
     @ToMany
     @JoinEntity(entity = TaskAndTag.class, sourceProperty = "taskId", targetProperty = "tagid")
     private List<Tag> tags;
@@ -67,10 +80,10 @@ public class Task {
     private transient TaskDao myDao;
 
     @Generated(hash = 421729428)
-    public Task(String taskId, Long HallTaskId, String taskTitle, String createDate, String deadLineDate,
-            String updatedate, String money, String content, String masterId, boolean isRecommend,
-            String sourceType, boolean isCurrentTask, Integer state, String name, String sex, String txUrl,
-            Integer masterlevel) {
+    public Task(String taskId, Long HallTaskId, String taskTitle, String createDate,
+                String deadLineDate, String updatedate, String money, String content, String masterId,
+                boolean isRecommend, String sourceType, boolean isCurrentTask, Integer state, String name,
+                String sex, String txUrl, Integer masterlevel) {
         this.taskId = taskId;
         this.HallTaskId = HallTaskId;
         this.taskTitle = taskTitle;
@@ -222,6 +235,14 @@ public class Task {
         this.txUrl = txUrl;
     }
 
+    public Integer getMasterlevel() {
+        return this.masterlevel;
+    }
+
+    public void setMasterlevel(Integer masterlevel) {
+        this.masterlevel = masterlevel;
+    }
+
     /**
      * To-many relationship, resolved on first access (and after reset).
      * Changes to to-many relations are not persisted, make changes to the target entity.
@@ -288,12 +309,12 @@ public class Task {
         myDao.update(this);
     }
 
-    public Integer getMasterlevel() {
-        return this.masterlevel;
+    public List<String> getImages() {
+        return images;
     }
 
-    public void setMasterlevel(Integer masterlevel) {
-        this.masterlevel = masterlevel;
+    public void setImages(List<String> images) {
+        this.images = images;
     }
 
     /** called by internal mechanisms, do not call yourself. */
@@ -302,6 +323,4 @@ public class Task {
         this.daoSession = daoSession;
         myDao = daoSession != null ? daoSession.getTaskDao() : null;
     }
-
-
 }

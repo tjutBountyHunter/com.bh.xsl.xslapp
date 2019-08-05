@@ -51,9 +51,16 @@ public class HunterHallModel extends BaseModel implements HunterHallContract.Mod
     }
 
     @Override
-    public Observable<List<Hunter>> getHistoryHunterRq(String masterId, int i) {
+    public Observable<List<Hunter>> getHistoryHunterRq(String masterId, int size) {
         return mRepositoryManager.obtainRetrofitService(HunterService.class)
-                .getHistoryHunter(masterId, i)
+                .getHistoryHunter(masterId, size)
+                .map(new ServerResponseFunc<>());
+    }
+
+    @Override
+    public Observable<List<Hunter>> getHotHunterRq(String masterId, int i) {
+        return mRepositoryManager.obtainRetrofitService(HunterService.class)
+                .getHotHunter(masterId, i)
                 .map(new ServerResponseFunc<>());
     }
 }

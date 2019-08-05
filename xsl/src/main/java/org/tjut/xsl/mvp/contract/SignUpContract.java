@@ -7,7 +7,6 @@ import org.tjut.xsl.mvp.model.entity.BaseResponse;
 import org.tjut.xsl.mvp.model.entity.User;
 
 import io.reactivex.Observable;
-import io.reactivex.ObservableSource;
 
 
 /**
@@ -35,9 +34,9 @@ public interface SignUpContract {
 
     //Model层定义接口,外部只需关心Model返回的数据,无需关心内部细节,即是否使用缓存
     interface Model extends IModel {
-        Observable<BaseResponse> getCode(String phone);
+        Observable<BaseResponse<String>> getCode(String phone);
 
-        Observable<BaseResponse> requestConfirmCode(String phone, String code);
+        Observable<BaseResponse<String>> requestConfirmCode(String phone, String code);
 
         Observable<User> getUser(String phone, String passwd,String token);
     }

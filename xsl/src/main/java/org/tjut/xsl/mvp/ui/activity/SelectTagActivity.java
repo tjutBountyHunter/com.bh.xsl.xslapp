@@ -4,15 +4,18 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
+import android.text.InputType;
 import android.util.TypedValue;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Toast;
 
 import com.jess.arms.base.BaseActivity;
 import com.jess.arms.di.component.AppComponent;
 import com.jess.arms.utils.ArmsUtils;
 import com.qmuiteam.qmui.widget.QMUIFloatLayout;
 import com.qmuiteam.qmui.widget.QMUITopBar;
+import com.qmuiteam.qmui.widget.dialog.QMUIDialog;
 import com.qmuiteam.qmui.widget.dialog.QMUITipDialog;
 import com.qmuiteam.qmui.widget.roundwidget.QMUIRoundButton;
 
@@ -57,7 +60,7 @@ public class SelectTagActivity extends BaseActivity<SelectTagPresenter> implemen
 
     private int mCurrentDialogStyle = com.qmuiteam.qmui.R.style.QMUI_Dialog;
 
-    private static HashMap<View, View> TAG_VIEW_MAP = new HashMap<>();
+    private HashMap<String, View> tag_view_map = new HashMap<>();
 
 
     @BindView(R.id.floatl_tags)
@@ -83,17 +86,44 @@ public class SelectTagActivity extends BaseActivity<SelectTagPresenter> implemen
 
     @OnClick(R.id.bt_create_tag)
     void createTag() {
-
+        if (selectedTagsFloat.getChildCount() >= 5) {
+            countTipDialog.show();
+            mContainer.postDelayed(() -> countTipDialog.dismiss(), 1000);
+        } else
+            showEditTextDialog();
     }
 
     @OnClick(R.id.bt_create_tag_empty)
     void createTagEmpty() {
-
+        if (selectedTagsFloat.getChildCount() >= 5) {
+            countTipDialog.show();
+            mContainer.postDelayed(() -> countTipDialog.dismiss(), 1000);
+        } else
+            showEditTextDialog();
     }
 
     @OnClick(R.id.bt_get_tag)
     void getOtherTags() {
         Objects.requireNonNull(mPresenter).getOtherTagsData();
+    }
+
+    @OnClick(R.id.bt_yes)
+    void complete() {
+        ArrayList<String> tagIds = new ArrayList<>();
+        ArrayList<String> tagNams = new ArrayList<>();
+        Tag tag;
+        TagView tagView = null;
+        for (int i = 0; i < selectedTagsFloat.getChildCount(); i++) {
+            tagView = (TagView) selectedTagsFloat.getChildAt(i);
+            tag = new Tag((String) tagView.getTag(), tagView.getText().toString());
+            tagIds.add(tag.getTagid());
+            tagNams.add(tag.getTagName());
+        }
+        Intent intent = new Intent();
+        intent.putStringArrayListExtra("tagIds", tagIds);
+        intent.putStringArrayListExtra("tagNams", tagNams);
+        setResult(RESULT_CODE, intent);
+        finish();
     }
 
 
@@ -130,12 +160,14 @@ public class SelectTagActivity extends BaseActivity<SelectTagPresenter> implemen
 
     @Override
     public void showLoading() {
-        tipDialog.show();
+        if (!tipDialog.isShowing()) {
+            tipDialog.show();
+        }
     }
 
     @Override
     public void hideLoading() {
-        tipDialog.hide();
+        tipDialog.dismiss();
     }
 
     @Override
@@ -158,7 +190,10 @@ public class SelectTagActivity extends BaseActivity<SelectTagPresenter> implemen
     @Override
     protected void onDestroy() {
         super.onDestroy();
-        TAG_VIEW_MAP = null;
+        if (tag_view_map != null) {
+            tag_view_map.clear();
+            tag_view_map = null;
+        }
     }
 
     public void showSelectTags(TagView tagTopView) {
@@ -167,9 +202,10 @@ public class SelectTagActivity extends BaseActivity<SelectTagPresenter> implemen
         textView.setText(tagTopView.getText());
         textView.setSelected(true);
         textView.setOnClickListener(selectListener);
+        textView.setTag(tagTopView.getTag());
         ViewGroup.LayoutParams lp = new ViewGroup.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT);
         selectedTagsFloat.addView(textView, lp);
-        TAG_VIEW_MAP.put(textView, tagTopView);
+        tag_view_map.put((String) tagTopView.getTag(), tagTopView);
     }
 
 
@@ -186,22 +222,37 @@ public class SelectTagActivity extends BaseActivity<SelectTagPresenter> implemen
                 textView.setTextSize(TypedValue.COMPLEX_UNIT_SP, 14);
                 textView.setText(tag.getTagName());
                 textView.setOnClickListener(listener);
+                textView.setTag(tag.getTagid());
                 ViewGroup.LayoutParams lp = new ViewGroup.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT);
                 tagsFloat.addView(textView, lp);
-                TagView tagView;
-                for (int i = 0; i < selectedTagsFloat.getChildCount(); i++) {
-                    tagView = (TagView) selectedTagsFloat.getChildAt(i);
-                    if (textView.getText().toString().equals(tagView.getText().toString())) {
-                        TAG_VIEW_MAP.remove(tagView);
-                        TAG_VIEW_MAP.put(tagView, textView);
-                        textView.setSelected(true);
-                    }
+                if (tag_view_map.containsKey(tag.getTagid())) {
+                    textView.setSelected(true);
+                    tag_view_map.remove(tag.getTagid());
+                    tag_view_map.put(tag.getTagid(), textView);
                 }
             }
         } else {
             mEmptyView.setVisibility(View.VISIBLE);
             mContainer.setVisibility(View.GONE);
         }
+    }
+
+    @Override
+    public void addTag(Tag tag) {
+        TagView textView = new TagView(this);
+        textView.setTextSize(TypedValue.COMPLEX_UNIT_SP, 14);
+        textView.setText(tag.getTagName());
+        textView.setSelected(true);
+        textView.setOnClickListener(listener);
+        textView.setTag(tag.getTagid());
+        ViewGroup.LayoutParams lp = new ViewGroup.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT);
+        tagsFloat.addView(textView, lp);
+        showSelectTags(textView);
+    }
+
+    @Override
+    public void showResult(ArrayList<String> tagNames) {
+
     }
 
     private View.OnClickListener listener = new View.OnClickListener() {
@@ -223,11 +274,33 @@ public class SelectTagActivity extends BaseActivity<SelectTagPresenter> implemen
         @Override
         public void onClick(View v) {
             selectedTagsFloat.removeView(v);
-            View topTag = TAG_VIEW_MAP.get(v);
+            View topTag = tag_view_map.remove((String) v.getTag());
             if (topTag != null) {
                 topTag.setSelected(false);
-                TAG_VIEW_MAP.remove(v);
             }
         }
     };
+
+    private void showEditTextDialog() {
+        final QMUIDialog.EditTextDialogBuilder builder = new QMUIDialog.EditTextDialogBuilder(this);
+        builder.setTitle("创建标签")
+                .setPlaceholder("在此输入您的标签,5字以内")
+                .setInputType(InputType.TYPE_CLASS_TEXT)
+                .addAction("取消", (dialog, index) -> dialog.dismiss())
+                .addAction("确定", (dialog, index) -> {
+                    CharSequence text = builder.getEditText().getText();
+                    if (text != null && text.length() > 0) {
+                        if (text.length() > 5) {
+                            showMessage("长度不能超过5");
+                        }
+                        dialog.dismiss();
+                        Objects.requireNonNull(mPresenter).createTag(text);
+                    } else {
+                        showMessage("请输入标签");
+                    }
+                })
+                .create(mCurrentDialogStyle).show();
+    }
+
+
 }

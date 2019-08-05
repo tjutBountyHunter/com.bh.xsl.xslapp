@@ -39,11 +39,16 @@ import org.tjut.xsl.mvp.model.entity.Task;
 import org.tjut.xsl.mvp.presenter.HallFragmentPresenter;
 
 import org.tjut.xsl.R;
+import org.tjut.xsl.mvp.ui.activity.AddTaskActivity;
 import org.tjut.xsl.mvp.ui.activity.ConfirmActivity;
 import org.tjut.xsl.mvp.ui.activity.SchoolActivity;
+import org.tjut.xsl.mvp.ui.activity.SearchTaskActivity;
+import org.tjut.xsl.mvp.ui.activity.TaskDetailActivity;
+import org.tjut.xsl.mvp.ui.activity.UserCenterActivity;
 import org.tjut.xsl.mvp.ui.widget.TaskTagView;
 import org.tjut.xsl.mvp.ui.widget.YMULevelText;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
 
@@ -70,6 +75,7 @@ public class HallFragment extends BaseFragment<HallFragmentPresenter> implements
 
     public final static int SCHOOL_REQUEST_CODE = 1;
     public final static String TAG = HallFragment.class.getSimpleName();
+    private static final int CONFIRM_REQUEST = 10;
     private int mCurrentDialogStyle = com.qmuiteam.qmui.R.style.QMUI_Dialog;
 
     @BindView(R.id.rev_task)
@@ -94,14 +100,25 @@ public class HallFragment extends BaseFragment<HallFragmentPresenter> implements
     @OnClick(R.id.iv_add_task)
     void ClickaddTask() {
         if (checkPermission()) {
-
+            Intent intent = new Intent(getActivity(), AddTaskActivity.class);
+            launchActivity(intent);
         } else {
             showNotConfirmView();
         }
     }
 
+    @OnClick(R.id.iv_touxiang)
+    void onTouXiang() {
+        startActivity(new Intent(getActivity(), UserCenterActivity.class));
+    }
+
+    @OnClick(R.id.bt_search)
+    void onSearch() {
+        startActivity(new Intent(getActivity(), SearchTaskActivity.class));
+    }
+
     private boolean checkPermission() {
-        return AccountManager.NORMAL_STATE != AccountManager.getState();
+        return AccountManager.NORMAL_STATE == AccountManager.getState();
     }
 
     private void showNotConfirmView() {
@@ -111,6 +128,7 @@ public class HallFragment extends BaseFragment<HallFragmentPresenter> implements
                 .addAction("取消", (dialog, index) -> dialog.dismiss())
                 .addAction("去认证", (dialog, index) -> {
                     dialog.dismiss();
+                    startActivityForResult(new Intent(mContext, ConfirmActivity.class),CONFIRM_REQUEST);
                     launchActivity(new Intent(mContext, ConfirmActivity.class));
                 })
                 .create(mCurrentDialogStyle).show();
@@ -148,10 +166,13 @@ public class HallFragment extends BaseFragment<HallFragmentPresenter> implements
     private void setAdapter() {
         adapter = new TaskAdapter(R.layout.item_task_card);
         adapter.setOnItemClickListener((adapter, view, position) -> {
-
+                Intent intent = new Intent(getActivity(), TaskDetailActivity.class);
+                intent.putExtra("taskId", (String) view.getTag());
+                launchActivity(intent);
         });
         adapter.setOnItemChildClickListener((adapter, view, position) -> {
             if (view instanceof QMUIRoundButton) {
+                Objects.requireNonNull(mPresenter).reciveTask((String) view.getTag());
             }
         });
         tasksView.setLayoutManager(new LinearLayoutManager(getContext()));
@@ -252,8 +273,18 @@ public class HallFragment extends BaseFragment<HallFragmentPresenter> implements
 
     @Override
     public void showEmptyView() {
+        if (!adapter.getData().isEmpty()) {
+            adapter.getData().clear();
+            adapter.notifyDataSetChanged();
+        }
+        mEmptyView = new QMUIEmptyView(mContext);
         mEmptyView.setTitleText("没有任务啦，快去发布任务吧");
         adapter.setEmptyView(mEmptyView);
+    }
+
+    @Override
+    public void showReciveSuccess(String taskId) {
+        showMessagePositiveDialog(taskId);
     }
 
 
@@ -262,6 +293,10 @@ public class HallFragment extends BaseFragment<HallFragmentPresenter> implements
         super.onActivityResult(requestCode, resultCode, data);
         if (requestCode == SCHOOL_REQUEST_CODE) {
             if (resultCode == SchoolActivity.RESULT_CODE) {
+                Objects.requireNonNull(mPresenter).initData();
+            }
+        }else if (requestCode == CONFIRM_REQUEST){
+            if (resultCode == ConfirmActivity.REQUEST_CODE){
                 Objects.requireNonNull(mPresenter).initData();
             }
         }
@@ -275,6 +310,7 @@ public class HallFragment extends BaseFragment<HallFragmentPresenter> implements
 
         @Override
         protected void convert(BaseViewHolder helper, Task item) {
+            helper.itemView.setTag(item.getTaskId());
             QMUIRadiusImageView txView = helper.getView(R.id.iv_tx);
             ImageConfigImpl imageConfig = ImageConfigImpl.builder()
                     .url(item.getTxUrl())
@@ -311,7 +347,22 @@ public class HallFragment extends BaseFragment<HallFragmentPresenter> implements
 
             helper.setText(R.id.bt_recive_task, "接")
                     .addOnClickListener(R.id.bt_recive_task);
+            helper.getView(R.id.bt_recive_task).setTag(item.getTaskId());
 
         }
+    }
+
+    private void showMessagePositiveDialog(String taskId) {
+        new QMUIDialog.MessageDialogBuilder(getActivity())
+                .setTitle("接取成功")
+                .setMessage("去看看任务进度吧")
+                .addAction("取消", (dialog, index) -> dialog.dismiss())
+                .addAction("任务进度", (dialog, index) -> {
+                    dialog.dismiss();
+                    Intent intent = new Intent(getActivity(), TaskDetailActivity.class);
+                    intent.putExtra("taskId", taskId);
+                    Objects.requireNonNull(getContext()).startActivity(intent);
+                })
+                .create(mCurrentDialogStyle).show();
     }
 }

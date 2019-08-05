@@ -6,13 +6,16 @@ import org.greenrobot.greendao.annotation.Entity;
 import org.greenrobot.greendao.annotation.Id;
 import org.greenrobot.greendao.annotation.ToMany;
 
+import java.io.Serializable;
 import java.util.List;
 
 import org.greenrobot.greendao.annotation.Generated;
 import org.greenrobot.greendao.DaoException;
 
 @Entity
-public class HallTaskCard {
+public class HallTaskCard implements Serializable {
+
+    private static final long serialVersionUID = 1L;
 
     @Id(autoincrement = true)
     private Long HallTaskId;

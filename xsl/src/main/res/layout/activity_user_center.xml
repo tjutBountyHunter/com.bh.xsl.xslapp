@@ -1,0 +1,251 @@
+<?xml version="1.0" encoding="utf-8"?>
+<android.support.design.widget.CoordinatorLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".mvp.ui.activity.UserCenterActivity">
+
+
+    <com.qmuiteam.qmui.widget.QMUIAppBarLayout
+        android:id="@+id/QMUIAppBarLayout"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        app:elevation="0dp"
+        app:layout_anchorGravity="left|top">
+
+        <com.qmuiteam.qmui.widget.QMUICollapsingTopBarLayout
+            android:id="@+id/collapsing_topbar_layout_personal_center"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            app:layout_scrollFlags="scroll|exitUntilCollapsed|enterAlways"
+            app:qmui_collapsedTitleGravity="left"
+            app:qmui_contentScrim="?attr/qmui_config_color_blue"
+            app:qmui_expandedTitleGravity="left|top"
+            app:qmui_expandedTitleMarginStart="40dp"
+            app:qmui_expandedTitleMarginTop="16dp"
+            app:qmui_expandedTitleTextAppearance="@style/transparentText"
+            app:qmui_statusBarScrim="?attr/qmui_config_color_blue"
+            app:qmui_titleEnabled="true"
+            app:qmui_topBarId="@id/topbar_personal_center">
+
+            <RelativeLayout
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:background="@color/qmui_config_color_white"
+                android:paddingBottom="16dp"
+                app:qmui_layout_collapseMode="parallax"
+                app:qmui_layout_collapseParallaxMultiplier="0.7">
+
+                <ImageView
+                    android:id="@+id/imageView_background"
+                    android:layout_width="match_parent"
+                    android:layout_height="124dp"
+                    android:contentDescription="contentDescription"
+                    android:scaleType="centerCrop"
+                    android:src="@drawable/presentcenter_background" />
+
+                <com.qmuiteam.qmui.widget.QMUIRadiusImageView
+                    android:id="@+id/imageView_personal_touxiang"
+                    android:layout_width="72dp"
+                    android:layout_height="72dp"
+                    android:layout_marginLeft="12dp"
+                    android:layout_marginTop="92dp"
+                    android:clickable="true"
+                    android:src="@drawable/default_tx_man"
+                    app:qmui_border_width="0dp"
+                    app:qmui_is_circle="true" />
+
+                <android.support.constraint.ConstraintLayout
+
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:layout_below="@id/imageView_background">
+
+                    <TextView
+                        android:id="@+id/tv_personal_center_nichen"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginStart="12dp"
+                        android:layout_marginLeft="12dp"
+                        android:layout_marginTop="52dp"
+                        android:text="TJUT"
+                        android:textSize="12sp"
+                        android:textStyle="bold"
+                        app:layout_constraintLeft_toLeftOf="parent"
+                        app:layout_constraintTop_toTopOf="parent" />
+
+                    <ImageView
+                        android:id="@+id/image_sex"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginLeft="72dp"
+                        android:layout_marginTop="48dp"
+                        android:src="@drawable/ic_sex_male"
+                        app:layout_constraintLeft_toLeftOf="parent"
+                        app:layout_constraintTop_toTopOf="parent" />
+
+                    <Button
+                        android:id="@+id/bt_account_information"
+                        android:layout_width="60dp"
+                        android:layout_height="30dp"
+                        android:layout_marginTop="8dp"
+                        android:layout_marginRight="16dp"
+                        android:background="@drawable/button_side_background"
+                        android:text="账号资料"
+                        android:textColor="@color/app_color_blue"
+                        android:textSize="12sp"
+                        app:layout_constraintRight_toRightOf="parent"
+                        app:layout_constraintTop_toTopOf="parent" />
+
+                    <ImageView
+                        android:id="@+id/image_hunter_level"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginLeft="8dp"
+                        android:layout_marginTop="48dp"
+                        android:src="@drawable/ic_hunter_level_1"
+                        app:layout_constraintLeft_toRightOf="@id/image_sex"
+                        app:layout_constraintTop_toTopOf="parent" />
+
+                    <LinearLayout
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginLeft="4dp"
+                        android:layout_marginBottom="4dp"
+                        android:gravity="bottom"
+                        android:orientation="horizontal"
+                        app:layout_constraintBottom_toBottomOf="@id/image_hunter_level"
+                        app:layout_constraintLeft_toRightOf="@id/image_hunter_level">
+
+                        <org.tjut.xsl.mvp.ui.widget.YMULevelText
+                            android:id="@+id/leveltext_hunter"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            app:leadHeight="14dp"
+                            app:levelText="8"
+                            app:text="猎人" />
+
+                        <org.tjut.xsl.mvp.ui.widget.YMULevelProgresBar
+                            android:id="@+id/levelbar_hunter"
+                            android:layout_width="50dp"
+                            android:layout_height="14dp"
+                            app:progress_color="@color/app_color_blue_2" />
+
+                    </LinearLayout>
+
+
+                    <ImageView
+                        android:id="@+id/image_guzhu_level"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginLeft="100dp"
+                        android:layout_marginTop="48dp"
+                        android:src="@drawable/ic_guzhu"
+                        app:layout_constraintLeft_toRightOf="@id/image_hunter_level"
+                        app:layout_constraintTop_toTopOf="parent" />
+
+
+                    <LinearLayout
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginLeft="4dp"
+                        android:layout_marginBottom="4dp"
+                        android:gravity="bottom"
+                        android:orientation="horizontal"
+                        app:layout_constraintBottom_toBottomOf="@id/image_hunter_level"
+                        app:layout_constraintLeft_toRightOf="@id/image_guzhu_level">
+
+                        <org.tjut.xsl.mvp.ui.widget.YMULevelText
+                            android:id="@+id/leveltext_boss"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            app:backgroundColor="#99CC33"
+                            app:leadHeight="14dp"
+                            app:levelText="4"
+                            app:text="雇主" />
+
+                        <org.tjut.xsl.mvp.ui.widget.YMULevelProgresBar
+                            android:id="@+id/levelbar_boss"
+                            android:layout_width="50dp"
+                            android:layout_height="14dp"
+                            app:progress_color="#99CC33" />
+
+                    </LinearLayout>
+
+                    <TextView
+                        android:id="@+id/tv_skill_label"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginLeft="12dp"
+                        android:layout_marginTop="16dp"
+                        android:text="技能标签："
+                        app:layout_constraintLeft_toLeftOf="parent"
+                        app:layout_constraintTop_toBottomOf="@id/tv_personal_center_nichen" />
+
+                    <com.qmuiteam.qmui.widget.roundwidget.QMUIRoundButton
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginLeft="8dp"
+                        android:layout_marginTop="16dp"
+                        android:paddingLeft="8dp"
+                        android:paddingTop="2dp"
+                        android:paddingRight="8dp"
+                        android:paddingBottom="2dp"
+                        android:text="添加"
+                        android:textColor="@color/qmui_config_color_white"
+                        android:textSize="11sp"
+                        app:layout_constraintLeft_toRightOf="@id/tv_skill_label"
+                        app:layout_constraintTop_toBottomOf="@id/tv_personal_center_nichen"
+                        app:qmui_backgroundColor="@color/app_color_blue"
+                        app:qmui_borderWidth="0dp">
+
+
+                    </com.qmuiteam.qmui.widget.roundwidget.QMUIRoundButton>
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginLeft="12dp"
+                        android:layout_marginTop="8dp"
+                        android:text="这个人懒死了，什么都没有写╭(╯^╰)╮"
+                        android:textColor="@color/qmui_config_color_gray_6"
+                        android:textSize="12sp"
+                        app:layout_constraintLeft_toLeftOf="parent"
+                        app:layout_constraintTop_toBottomOf="@id/tv_skill_label" />
+
+
+                </android.support.constraint.ConstraintLayout>
+
+            </RelativeLayout>
+
+
+            <com.qmuiteam.qmui.widget.QMUITopBar
+                android:layout_marginTop="24dp"
+                android:id="@+id/topbar_personal_center"
+                android:layout_width="match_parent"
+                android:layout_height="?attr/qmui_topbar_height"
+                app:qmui_layout_collapseMode="pin"
+                app:qmui_topbar_bg_color="@color/qmui_config_color_transparent"
+                app:qmui_topbar_need_separator="false" />
+        </com.qmuiteam.qmui.widget.QMUICollapsingTopBarLayout>
+
+
+        <com.qmuiteam.qmui.widget.QMUITabSegment
+            android:id="@+id/tabSegment_personal_center"
+            android:layout_width="match_parent"
+            android:layout_height="36dp"
+            android:background="@drawable/tab_panel_bg"
+            android:textSize="14sp"
+            app:qmui_tab_has_indicator="true" />
+
+    </com.qmuiteam.qmui.widget.QMUIAppBarLayout>
+
+
+    <android.support.v4.view.ViewPager
+        android:id="@+id/personal_center_contentViewPager"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        app:layout_behavior="@string/appbar_scrolling_view_behavior" />
+
+</android.support.design.widget.CoordinatorLayout>

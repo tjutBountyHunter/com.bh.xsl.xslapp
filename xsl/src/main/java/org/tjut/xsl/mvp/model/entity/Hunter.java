@@ -1,17 +1,22 @@
 package org.tjut.xsl.mvp.model.entity;
 
+import com.google.gson.annotations.SerializedName;
+
 import org.greenrobot.greendao.annotation.Entity;
 import org.greenrobot.greendao.annotation.Id;
 import org.greenrobot.greendao.annotation.ToMany;
 
+import java.io.Serializable;
 import java.util.List;
 import org.greenrobot.greendao.annotation.Generated;
 import org.greenrobot.greendao.DaoException;
 
 @Entity
-public class Hunter {
+public class Hunter implements Serializable {
+    private static final long serialVersionUID = 1L;
 
     @Id
+    @SerializedName(value = "Hunterid",alternate = {"hunterid"})
     private String Hunterid;
 
     private String userid;

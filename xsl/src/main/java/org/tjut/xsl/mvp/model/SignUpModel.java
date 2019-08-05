@@ -12,15 +12,12 @@ import javax.inject.Inject;
 
 import org.tjut.xsl.database.DatabaseManager;
 import org.tjut.xsl.mvp.contract.SignUpContract;
-import org.tjut.xsl.mvp.model.api.service.SignInService;
 import org.tjut.xsl.mvp.model.api.service.SignUpService;
 import org.tjut.xsl.mvp.model.entity.BaseResponse;
 import org.tjut.xsl.mvp.model.entity.User;
 import org.tjut.xsl.mvp.model.entity.UserDao;
 
 import io.reactivex.Observable;
-import io.reactivex.ObservableSource;
-import io.reactivex.functions.Function;
 
 
 /**
@@ -55,13 +52,13 @@ public class SignUpModel extends BaseModel implements SignUpContract.Model {
     }
 
     @Override
-    public Observable<BaseResponse> getCode(String phone) {
+    public Observable<BaseResponse<String>> getCode(String phone) {
         return mRepositoryManager.obtainRetrofitService(SignUpService.class)
                 .getCode(phone);
     }
 
     @Override
-    public Observable<BaseResponse> requestConfirmCode(String phone, String code) {
+    public Observable<BaseResponse<String>> requestConfirmCode(String phone, String code) {
         return mRepositoryManager
                 .obtainRetrofitService(SignUpService.class)
                 .getCheckCode(phone, code);
@@ -72,7 +69,7 @@ public class SignUpModel extends BaseModel implements SignUpContract.Model {
         return mRepositoryManager
                 .obtainRetrofitService(SignUpService.class)
                 .getUser(phone, passwd, token)
-                .map(new ServerResponseFunc<User>())
+                .map(new ServerResponseFunc<>())
                 .map(user -> {
                     UserDao userDao = DatabaseManager.getInstance().getUserDao();
                     userDao.insertOrReplace(user);

@@ -44,4 +44,36 @@ public interface Api {
     String REQUEST_MAJOR = ROOT_PATH + "school/majorClasses";
 
     String TASK_TAG = ROOT_PATH + "tag/queryTag";
+
+    String TASK_CREATE_TAG = ROOT_PATH + "tag/createTag";
+
+    String AUTHENTICATION = ROOT_PATH + "user/userAcc";
+
+    String RELEASE_TASK = ROOT_PATH + "task/sendTask";
+
+    String TASK_DETAIL = ROOT_PATH + "task/queryTaskInfo";
+
+    String TASK_RECIVE = ROOT_PATH + "task/receiveTask";
+
+    String TASK_ALLAREAD = ROOT_PATH + "task/querySendTask";
+
+    String TASK_ALLRECIVE = ROOT_PATH + "task/queryReceiveTask";
+
+    String UPDATA_INFO = USER_PATH + "saveUserInfo";
+
+    String SIGN_OUT = USER_PATH + "logout";
+
+    String REQUEST_LEVEL = USER_PATH + "gethminfo";
+
+    String CANCEL_TASK = ROOT_PATH + "task/cancelTask";
+
+    String HUNTER_COMFIRME_COMPLET = ROOT_PATH + "task/confirmTask";
+
+    String MATER_COMPLET = ROOT_PATH + "task/okTask";
+
+    String SEARCH_TASK = ROOT_PATH + "task/searchTask";
+
+    String HOT_HUNTER = ROOT_PATH + "hunter/queryNBHunter";
+
+    String UPLOAD_USER_TX = ROOT_PATH + "user/userTx";
 }

@@ -6,21 +6,36 @@ import android.os.Message;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
+import android.support.v7.widget.GridLayoutManager;
+import android.support.v7.widget.RecyclerView;
+import android.support.v7.widget.Toolbar;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
+import com.chad.library.adapter.base.BaseMultiItemQuickAdapter;
+import com.chad.library.adapter.base.BaseQuickAdapter;
+import com.chad.library.adapter.base.BaseViewHolder;
 import com.jess.arms.base.BaseFragment;
 import com.jess.arms.di.component.AppComponent;
+import com.jess.arms.http.imageloader.glide.ImageConfigImpl;
 import com.jess.arms.utils.ArmsUtils;
+import com.qmuiteam.qmui.widget.dialog.QMUIDialog;
+import com.qmuiteam.qmui.widget.dialog.QMUITipDialog;
 
+import org.tjut.xsl.app.AccountManager;
 import org.tjut.xsl.di.component.DaggerHunterHallComponent;
 import org.tjut.xsl.mvp.contract.HunterHallContract;
+import org.tjut.xsl.mvp.model.entity.Hunter;
 import org.tjut.xsl.mvp.presenter.HunterHallPresenter;
 
 import org.tjut.xsl.R;
+import org.tjut.xsl.mvp.ui.widget.LineButton;
 
+import java.util.List;
 import java.util.Objects;
+
+import butterknife.BindView;
 
 import static com.jess.arms.utils.Preconditions.checkNotNull;
 
@@ -38,6 +53,22 @@ import static com.jess.arms.utils.Preconditions.checkNotNull;
  * ================================================
  */
 public class HunterHallFragment extends BaseFragment<HunterHallPresenter> implements HunterHallContract.View {
+
+    @BindView(R.id.relv_my_hunter)
+    RecyclerView mMyHunterRecycle = null;
+    @BindView(R.id.relv_hot_hunter)
+    RecyclerView mHotHunterRecycle = null;
+    @BindView(R.id.line_bt_my_hunter)
+    LineButton mMyHunterButton = null;
+    @BindView(R.id.line_bt_hot_hunter)
+    LineButton mHotHunterButton = null;
+    @BindView(R.id.toolbar_hall)
+    Toolbar toolbar;
+
+    private QMUITipDialog dialog;
+
+    private final HotHunterAdapter mHotAdapter = new HotHunterAdapter(R.layout.item_hot_hunter_card);
+    private final MyHunterRecyclerAdapter mMyAdapter = new MyHunterRecyclerAdapter(R.layout.item_hunter_my, null);
 
     public static HunterHallFragment newInstance() {
         HunterHallFragment fragment = new HunterHallFragment();
@@ -61,45 +92,22 @@ public class HunterHallFragment extends BaseFragment<HunterHallPresenter> implem
 
     @Override
     public void initData(@Nullable Bundle savedInstanceState) {
+        mHotHunterButton.setLeftText("更多");
+        mHotHunterButton.setTitleText("热门猎人");
+
+        mMyHunterRecycle.setLayoutManager(new GridLayoutManager(getContext(), 3));
+        mMyHunterRecycle.setAdapter(mMyAdapter);
+
+        mHotHunterRecycle.setLayoutManager(new GridLayoutManager(getContext(), 3));
+        mHotHunterRecycle.setAdapter(mHotAdapter);
+
+        dialog = new QMUITipDialog.Builder(getContext())
+                .setTipWord("正在加载")
+                .setIconType(QMUITipDialog.Builder.ICON_TYPE_LOADING)
+                .create();
         Objects.requireNonNull(mPresenter).initDate();
     }
 
-    /**
-     * 通过此方法可以使 Fragment 能够与外界做一些交互和通信, 比如说外部的 Activity 想让自己持有的某个 Fragment 对象执行一些方法,
-     * 建议在有多个需要与外界交互的方法时, 统一传 {@link Message}, 通过 what 字段来区分不同的方法, 在 {@link #setData(Object)}
-     * 方法中就可以 {@code switch} 做不同的操作, 这样就可以用统一的入口方法做多个不同的操作, 可以起到分发的作用
-     * <p>
-     * 调用此方法时请注意调用时 Fragment 的生命周期, 如果调用 {@link #setData(Object)} 方法时 {@link Fragment#onCreate(Bundle)} 还没执行
-     * 但在 {@link #setData(Object)} 里却调用了 Presenter 的方法, 是会报空的, 因为 Dagger 注入是在 {@link Fragment#onCreate(Bundle)} 方法中执行的
-     * 然后才创建的 Presenter, 如果要做一些初始化操作,可以不必让外部调用 {@link #setData(Object)}, 在 {@link #initData(Bundle)} 中初始化就可以了
-     * <p>
-     * Example usage:
-     * <pre>
-     * public void setData(@Nullable Object data) {
-     *     if (data != null && data instanceof Message) {
-     *         switch (((Message) data).what) {
-     *             case 0:
-     *                 loadData(((Message) data).arg1);
-     *                 break;
-     *             case 1:
-     *                 refreshUI();
-     *                 break;
-     *             default:
-     *                 //do something
-     *                 break;
-     *         }
-     *     }
-     * }
-     *
-     * // call setData(Object):
-     * Message data = new Message();
-     * data.what = 0;
-     * data.arg1 = 1;
-     * fragment.setData(data);
-     * </pre>
-     *
-     * @param data 当不需要参数时 {@code data} 可以为 {@code null}
-     */
     @Override
     public void setData(@Nullable Object data) {
 
@@ -107,12 +115,12 @@ public class HunterHallFragment extends BaseFragment<HunterHallPresenter> implem
 
     @Override
     public void showLoading() {
-
+        dialog.show();
     }
 
     @Override
     public void hideLoading() {
-
+        dialog.dismiss();
     }
 
     @Override
@@ -129,6 +137,58 @@ public class HunterHallFragment extends BaseFragment<HunterHallPresenter> implem
 
     @Override
     public void killMyself() {
+
+    }
+
+    @Override
+    public void showMyHunter(List<Hunter> hunters) {
+        mMyAdapter.replaceData(hunters);
+    }
+
+    @Override
+    public void showHotHunter(List<Hunter> hunters) {
+        mHotAdapter.replaceData(hunters);
+    }
+
+    class MyHunterRecyclerAdapter extends BaseQuickAdapter<Hunter, BaseViewHolder> {
+
+
+        MyHunterRecyclerAdapter(int layoutResId, @Nullable List<Hunter> data) {
+            super(layoutResId, data);
+        }
+
+        @Override
+        protected void convert(BaseViewHolder helper, Hunter item) {
+            helper.setText(R.id.tv_my_hunter_name, item.getName());
+            Objects.requireNonNull(mPresenter).loadMyHunterTx(ImageConfigImpl.builder()
+                    .url(item.getTxUrl())
+                    .imageView(helper.getView(R.id.imageView3))
+                    .placeholder("男".equals(AccountManager.getSex()) ? R.drawable.default_tx_man : R.drawable.default_tx_woman)
+                    .build());
+        }
+    }
+
+    class HotHunterAdapter extends BaseQuickAdapter<Hunter, BaseViewHolder> {
+
+        HotHunterAdapter(int layoutResId) {
+            super(layoutResId);
+        }
+
+        @Override
+        protected void convert(BaseViewHolder helper, Hunter item) {
+            helper.setText(R.id.tv_title, String.format("%s级猎人", item.getLevel()));
+            String name = item.getName();
+            if (name.length() > 5) {
+                name = name.substring(name.length() - 4) + "*";
+            }
+            helper.setText(R.id.tv_name, name);
+            Objects.requireNonNull(mPresenter).loadMyHunterTx(ImageConfigImpl.builder()
+                    .url(item.getTxUrl())
+                    .imageView(helper.getView(R.id.image_touxiang))
+                    .placeholder("男".equals(AccountManager.getSex()) ? R.drawable.default_tx_man : R.drawable.default_tx_woman)
+                    .build());
+
+        }
 
     }
 }

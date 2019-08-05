@@ -3,10 +3,18 @@ package org.tjut.xsl.app;
 
 import org.tjut.xsl.mvp.model.entity.User;
 
+import timber.log.Timber;
+
 public class AccountManager {
 
     public static final int NOT_CONFIRM_STATE = 0;
     public static final int NORMAL_STATE = 1;
+
+    public static void logOut() {
+        setSignState(false);
+        TeaPreference.clearAppPreferences();
+        TeaPreference.clearContextPreferences();
+    }
 
 
     public enum SignTag {

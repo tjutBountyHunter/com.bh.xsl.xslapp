@@ -11,20 +11,22 @@ import com.jess.arms.di.scope.ActivityScope;
 
 import javax.inject.Inject;
 
+import org.greenrobot.greendao.query.WhereCondition;
+import org.tjut.xsl.database.DatabaseManager;
 import org.tjut.xsl.mvp.contract.SelectTagContract;
 import org.tjut.xsl.mvp.model.api.service.TagService;
 import org.tjut.xsl.mvp.model.entity.BaseResponse;
 import org.tjut.xsl.mvp.model.entity.Tag;
+import org.tjut.xsl.mvp.model.entity.TagDao;
+import org.tjut.xsl.mvp.model.entity.UserAndTag;
+import org.tjut.xsl.mvp.model.entity.UserAndTagDao;
 
 import java.util.ArrayList;
-import java.util.Collections;
 import java.util.List;
 
 import io.reactivex.Observable;
 import io.reactivex.ObservableSource;
-import io.reactivex.Observer;
 import io.reactivex.functions.Function;
-import io.reactivex.functions.Predicate;
 import okhttp3.MediaType;
 import okhttp3.RequestBody;
 
@@ -92,4 +94,24 @@ public class SelectTagModel extends BaseModel implements SelectTagContract.Model
                     return tags;
                 });
     }
+
+    @Override
+    public Observable<Tag> createTag(CharSequence text) {
+        return mRepositoryManager.obtainRetrofitService(TagService.class)
+                .addTag(text.toString())
+                .map(new ServerResponseFunc<String>())
+                .map(s -> {
+                    Tag tag = null;
+                    if (s != null) {
+                        tag = new Tag();
+                        tag.setTagid(s);
+                        tag.setTagName(text.toString());
+                        TAG_BEANS.add(tag);
+                    }
+                    return tag;
+                });
+
+    }
+
+
 }

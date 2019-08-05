@@ -18,10 +18,13 @@ import me.jessyan.rxerrorhandler.handler.ErrorHandleSubscriber;
 import javax.inject.Inject;
 
 import org.tjut.xsl.app.AccountManager;
+import org.tjut.xsl.app.utils.CheckUtil;
 import org.tjut.xsl.mvp.contract.ConfirmContract;
 import org.tjut.xsl.mvp.model.entity.Hunter;
+import org.tjut.xsl.mvp.model.entity.Tag;
 import org.tjut.xsl.mvp.model.entity.User;
 
+import java.util.ArrayList;
 import java.util.List;
 
 
@@ -116,6 +119,82 @@ public class ConfirmPresenter extends BasePresenter<ConfirmContract.Model, Confi
                     @Override
                     public void onNext(Boolean isSet) {
 
+                    }
+                });
+    }
+
+    public void checkInfoForm() {
+        mModel.getUserInfo(AccountManager.getUserId())
+                .subscribeOn(Schedulers.io())
+                .doOnSubscribe(disposable -> {
+                    mRootView.showLoading();
+                })
+                .subscribeOn(AndroidSchedulers.mainThread())
+                .observeOn(AndroidSchedulers.mainThread())
+                .doFinally(() -> mRootView.hideLoading())
+                .compose(RxLifecycleUtils.bindToLifecycle(mRootView))//使用 Rxlifecycle,使 Disposable 和 Activity 一起销毁
+                .subscribe(new ErrorHandleSubscriber<User>(mErrorHandler) {
+                    @Override
+                    public void onNext(User user) {
+                        String school = user.getSchool();
+                        String college = user.getCollege();
+                        String major = user.getMajor();
+                        String sex = user.getSex();
+                        String number = user.getSno();
+                        List<Tag> tags = user.getTags();
+                        if (CheckUtil.notNull(school, college, major, sex, number) && tags != null && !tags.isEmpty()) {
+                            commitInfo(user);
+                        } else {
+                            mRootView.showMessage("请补全信息和技能标签");
+                        }
+                    }
+                });
+
+
+    }
+
+
+    public void commitInfo(User user) {
+        mModel.commitInfo(user)
+                .subscribeOn(Schedulers.io())
+                .doOnSubscribe(disposable -> {
+                    mRootView.showLoading();
+                })
+                .subscribeOn(AndroidSchedulers.mainThread())
+                .observeOn(AndroidSchedulers.mainThread())
+                .doFinally(() -> mRootView.hideLoading())
+                .compose(RxLifecycleUtils.bindToLifecycle(mRootView))//使用 Rxlifecycle,使 Disposable 和 Activity 一起销毁
+                .subscribe(new ErrorHandleSubscriber<User>(mErrorHandler) {
+                    @Override
+                    public void onNext(User user) {
+                        if (user!=null){
+                            mRootView.showConfirmSuccess();
+                        }else {
+                            mRootView.showMessage("认证失败");
+                        }
+                    }
+                });
+
+    }
+
+    public void saveUserTags(List<Tag> tags) {
+        mModel.saveUserTags(tags, AccountManager.getUserId())
+                .subscribeOn(Schedulers.io())
+                .doOnSubscribe(disposable -> {
+                    mRootView.showLoading();
+                })
+                .subscribeOn(AndroidSchedulers.mainThread())
+                .observeOn(AndroidSchedulers.mainThread())
+                .doFinally(() -> mRootView.hideLoading())
+                .compose(RxLifecycleUtils.bindToLifecycle(mRootView))//使用 Rxlifecycle,使 Disposable 和 Activity 一起销毁
+                .subscribe(new ErrorHandleSubscriber<ArrayList<String>>(mErrorHandler) {
+                    @Override
+                    public void onNext(ArrayList<String> tagNames) {
+                        if (tagNames != null) {
+                            mRootView.showSelectTags(tagNames);
+                        } else {
+                            mRootView.showMessage("未知错误，请稍后重试");
+                        }
                     }
                 });
     }

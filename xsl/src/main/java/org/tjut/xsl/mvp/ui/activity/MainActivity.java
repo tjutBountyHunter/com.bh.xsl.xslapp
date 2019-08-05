@@ -23,6 +23,7 @@ import org.tjut.xsl.mvp.presenter.MainPresenter;
 import org.tjut.xsl.R;
 import org.tjut.xsl.mvp.ui.fragment.HallFragment;
 import org.tjut.xsl.mvp.ui.fragment.HunterHallFragment;
+import org.tjut.xsl.mvp.ui.fragment.MessageFragment;
 
 
 import java.util.HashMap;
@@ -175,7 +176,7 @@ public class MainActivity extends BaseActivity<MainPresenter> implements MainCon
             } else if (page == ContentPage.Item2) {
                 fragment = HunterHallFragment.newInstance();
             } else if (page == ContentPage.Item3) {
-                fragment = HallFragment.newInstance();
+                fragment = MessageFragment.newInstance();
             }
             mPageMap.put(page, fragment);
         }

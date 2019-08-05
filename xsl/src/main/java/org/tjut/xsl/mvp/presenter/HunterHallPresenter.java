@@ -1,7 +1,10 @@
 package org.tjut.xsl.mvp.presenter;
 
 import android.app.Application;
+import android.arch.lifecycle.Lifecycle;
+import android.arch.lifecycle.OnLifecycleEvent;
 
+import com.jess.arms.http.imageloader.glide.ImageConfigImpl;
 import com.jess.arms.integration.AppManager;
 import com.jess.arms.di.scope.FragmentScope;
 import com.jess.arms.mvp.BasePresenter;
@@ -74,8 +77,28 @@ public class HunterHallPresenter extends BasePresenter<HunterHallContract.Model,
                 .subscribe(new ErrorHandleSubscriber<List<Hunter>>(mErrorHandler) {
                     @Override
                     public void onNext(List<Hunter> hunters) {
-
+                        mRootView.showMyHunter(hunters);
                     }
                 });
+
+        mModel.getHotHunterRq(AccountManager.getMasterId(), 9)
+                .subscribeOn(Schedulers.io())
+                .doOnSubscribe(disposable -> {
+                    mRootView.showLoading();
+                })
+                .subscribeOn(AndroidSchedulers.mainThread())
+                .observeOn(AndroidSchedulers.mainThread())
+                .doFinally(() -> mRootView.hideLoading())
+                .compose(RxLifecycleUtils.bindToLifecycle(mRootView))//使用 Rxlifecycle,使 Disposable 和 Activity 一起销毁
+                .subscribe(new ErrorHandleSubscriber<List<Hunter>>(mErrorHandler) {
+                    @Override
+                    public void onNext(List<Hunter> hunters) {
+                        mRootView.showHotHunter(hunters);
+                    }
+                });
+    }
+
+    public void loadMyHunterTx(ImageConfigImpl build) {
+        mImageLoader.loadImage(mApplication, build);
     }
 }

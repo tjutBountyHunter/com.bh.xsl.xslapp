@@ -27,6 +27,7 @@ import javax.inject.Inject;
 
 import org.tjut.xsl.R;
 import org.tjut.xsl.app.AccountManager;
+import org.tjut.xsl.app.DataNullException;
 import org.tjut.xsl.app.GlobalConfiguration;
 import org.tjut.xsl.mvp.contract.HallFragmentContract;
 import org.tjut.xsl.mvp.model.entity.BaseResponse;
@@ -97,11 +98,50 @@ public class HallFragmentPresenter extends BasePresenter<HallFragmentContract.Mo
                                 mRootView.showInitData(tasks);
                             }
                         }
+
+                        @Override
+                        public void onError(Throwable t) {
+                            if (t instanceof DataNullException) {
+                                mRootView.showEmptyView();
+                            } else {
+                                super.onError(t);
+                            }
+                        }
                     });
         }
     }
 
     public void loadTaskItemTx(ImageConfigImpl imageConfig) {
         mImageLoader.loadImage(mApplication, imageConfig);
+    }
+
+    public void reciveTask(String taskid) {
+        if (AccountManager.getState() != AccountManager.NORMAL_STATE){
+            mRootView. showMessage("你还未进行认证，或登录状态异常");
+            return;
+        }
+        mModel.reciveTask(taskid, AccountManager.getHunterId())
+                .subscribeOn(Schedulers.io())
+                .doOnSubscribe(disposable -> {
+                    mRootView.showLoading();
+                })
+                .subscribeOn(AndroidSchedulers.mainThread())
+                .observeOn(AndroidSchedulers.mainThread())
+                .doFinally(() -> mRootView.hideLoading())
+                .compose(RxLifecycleUtils.bindToLifecycle(mRootView))//使用 Rxlifecycle,使 Disposable 和 Activity 一起销毁
+                .subscribe(new ErrorHandleSubscriber<String>(mErrorHandler) {
+                    @Override
+                    public void onNext(String s) {
+                        mRootView.showReciveSuccess(taskid);
+                    }
+                    @Override
+                    public void onError(Throwable t) {
+                        if (t instanceof DataNullException) {
+                            mRootView.showReciveSuccess(taskid);
+                        } else {
+                            super.onError(t);
+                        }
+                    }
+                });
     }
 }

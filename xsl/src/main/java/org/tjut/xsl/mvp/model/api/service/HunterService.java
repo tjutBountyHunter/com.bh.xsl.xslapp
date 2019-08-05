@@ -16,4 +16,9 @@ public interface HunterService {
     @FormUrlEncoded
     @POST(Api.MY_HISTORY_HUNTER)
     Observable<BaseResponse<List<Hunter>>> getHistoryHunter(@Field("masterId") String phone, @Field("size") Integer size);
+
+
+    @FormUrlEncoded
+    @POST(Api.HOT_HUNTER)
+    Observable<BaseResponse<List<Hunter>>> getHotHunter(@Field("masterId") String masterId, @Field("size") int i);
 }
