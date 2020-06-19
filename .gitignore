@@ -1,0 +1,6 @@
+/*.iml
+/app/*.iml
+/xsl/*.iml
+.idea/
+.gradle/
+/*.properties
